@@ -1,0 +1,435 @@
+/* --- Facebook Inspired Colors --- */
+:root {
+    --fb-blue: #1877f2;
+    --fb-gray: #f0f2f5;
+    --fb-light-gray: #e4e6eb;
+    --fb-text-dark: #050505;
+    --fb-text-secondary: #606770;
+    --fb-green: #38a169; 
+}
+
+/* --- Global Layout --- */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.fb-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--fb-gray);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* --- 1. Header (Top Navigation) --- */
+.fb-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    height: 56px;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-text {
+    font-size: 24px;
+    color: var(--fb-blue);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Hide desktop-specific header elements on mobile by default */
+.header-right,
+.header-center {
+    display: none; 
+}
+
+.user-profile-icon a,
+.logout-btn {
+    text-decoration: none;
+    color: var(--fb-text-dark);
+    font-weight: 600;
+    background-color: var(--fb-light-gray);
+    border-radius: 50px;
+    padding: 8px 12px;
+    transition: background-color 0.2s;
+    font-size: 14px;
+}
+
+.user-profile-icon a:hover,
+.logout-btn:hover {
+    background-color: #ccd0d5;
+}
+
+/* --- Mobile Navigation Bar (Fixed Bottom) --- */
+.mobile-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background-color: #fff;
+    border-top: 1px solid var(--fb-light-gray);
+    z-index: 1000;
+}
+
+.mobile-nav .nav-item {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--fb-text-secondary);
+    font-size: 20px;
+    padding: 10px 0;
+    cursor: pointer;
+    text-align: center;
+}
+
+.mobile-nav .nav-item.active {
+    color: var(--fb-blue);
+    position: relative;
+}
+
+.mobile-nav .nav-item.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: var(--fb-blue);
+}
+
+/* --- 2. Main Content Wrapper (Mobile View) --- */
+.fb-content-wrapper {
+    display: flex;
+    flex-direction: column; /* Stack columns vertically on mobile */
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 0; 
+    flex: 1;
+}
+
+/* Sidebars are hidden on mobile */
+.left-sidebar,
+.right-sidebar {
+    display: none;
+}
+
+/* Middle Content takes up full width on mobile */
+.main-content {
+    flex: 1;
+    width: 100%;
+    max-width: none; 
+    padding: 10px 0; /* Add vertical padding */
+}
+
+/* Reset view container styles for mobile */
+.feed-container,
+.friends-view-container {
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+    background-color: transparent;
+}
+
+.friends-view-container {
+    padding-bottom: 60px; /* Space for the fixed mobile nav bar */
+}
+
+/* Post and Composer styles for mobile */
+.post-composer,
+.post-card,
+.friend-section {
+    background-color: #fff;
+    border-radius: 0;
+    box-shadow: none;
+    margin-bottom: 8px;
+    padding: 12px 16px;
+}
+
+.post-card {
+    padding: 16px;
+}
+
+.friend-section {
+    padding: 16px;
+    border-top: none;
+}
+
+/* Suggested Friends mobile layout: vertical stack */
+.suggested-grid {
+    display: grid;
+    grid-template-columns: 1fr; 
+    gap: 10px;
+}
+
+/* --- Shared Component Styles (Mobile/Desktop) --- */
+
+.divider {
+    border: 0;
+    height: 1px;
+    background-color: var(--fb-light-gray);
+    margin: 10px 0;
+}
+
+.sidebar-title {
+    color: var(--fb-text-secondary);
+    font-weight: 600;
+    margin: 10px 0;
+    padding-left: 8px;
+    font-size: 14px;
+}
+
+.post-composer textarea {
+    width: 100%;
+    border: none;
+    resize: none;
+    font-size: 16px;
+    padding: 8px 0;
+    min-height: 50px;
+    outline: none;
+}
+
+.post-button {
+    width: 100%;
+    padding: 8px;
+    background-color: var(--fb-blue);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.pro-img {
+    width: 40px;
+    height: 40px;
+    background-color: var(--fb-light-gray);
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid var(--fb-light-gray);
+}
+
+.pro-img.small {
+    width: 32px;
+    height: 32px;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.post-media {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.post-image,
+.post-video {
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+/* Friends Card Styles */
+.friend-card-small {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: var(--fb-light-gray);
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.friend-card-small .info {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+.add-button button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 8px;
+    border: none;
+}
+
+.request .accept-btn, .suggestion .add-btn {
+    background-color: var(--fb-blue);
+    color: #fff;
+}
+
+.request .delete-btn, .my-friend .delete-btn, .sent-request .cancel-btn {
+    background-color: var(--fb-light-gray);
+    color: var(--fb-text-dark);
+}
+
+.friend-card-large {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.friend-card-large .pro-img {
+    width: 60px;
+    height: 60px;
+}
+
+/* --- MEDIA QUERY for Tablet/Desktop (>= 768px) --- */
+@media (min-width: 768px) {
+    /* Header Re-enable Desktop Nav */
+    .header-right,
+    .header-center {
+        display: flex; 
+    }
+    
+    .header-center {
+        flex-grow: 1;
+        max-width: 700px;
+        justify-content: center;
+    }
+    
+    .main-nav {
+        display: flex;
+        gap: 8px;
+    }
+
+    .nav-item {
+        background: none;
+        border: none;
+        color: var(--fb-text-secondary);
+        font-size: 16px;
+        padding: 10px 30px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.2s, color 0.2s;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+    
+    .nav-item:hover {
+        background-color: var(--fb-light-gray);
+    }
+    
+    .nav-item.active {
+        color: var(--fb-blue);
+        border-bottom: 3px solid var(--fb-blue);
+        background-color: transparent;
+        padding-bottom: 7px; 
+    }
+
+    .header-right {
+        gap: 15px;
+    }
+    
+    .mobile-nav {
+        display: none;
+    }
+
+    /* Content Wrapper Desktop Layout */
+    .fb-content-wrapper {
+        flex-direction: row;
+        max-width: 1300px;
+        padding-top: 16px;
+    }
+
+    /* Sidebars Desktop Display */
+    .left-sidebar,
+    .right-sidebar {
+        display: block;
+        width: 250px;
+        padding: 8px;
+        position: sticky;
+        top: 72px; 
+        height: calc(100vh - 72px);
+        overflow-y: auto;
+    }
+    
+    .left-sidebar {
+        padding-left: 24px;
+    }
+    
+    .right-sidebar {
+        padding-right: 24px;
+    }
+    
+    /* Sidebar Links */
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.1s;
+        font-weight: 500;
+        gap: 10px;
+    }
+
+    .sidebar-link:hover {
+        background-color: var(--fb-light-gray);
+    }
+    
+    .sidebar-link.active {
+        color: var(--fb-blue);
+    }
+
+    /* Main Content Desktop Display */
+    .main-content {
+        max-width: 590px;
+        padding: 0 10px;
+    }
+
+    /* Reset desktop styling for content views */
+    .feed-container,
+    .friends-view-container {
+        padding: 16px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .post-card {
+        border-radius: 8px;
+        margin-bottom: 16px;
+    }
+
+    .friend-section {
+        padding: 16px 0;
+        border-top: 1px solid var(--fb-light-gray);
+    }
+
+    .suggested-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Re-enable 2-column grid */
+        gap: 15px;
+    }
+
+    .post-composer {
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+    }
+}

@@ -1,0 +1,230 @@
+/* --- Global Variables and Base Setup (Consistent with Sign Up) --- */
+* {
+    box-sizing: border-box; 
+}
+
+:root {
+    --primary-color: #1877F2; /* Login Button & Brand Blue */
+    --accent-color: #28a745;  /* Used for Sign Up / Secondary Actions */
+    --background-light: #f0f2f5; 
+    --card-background: #ffffff;
+    --text-dark: #333333;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    line-height: 1.6;
+}
+
+/* ------------------------------------------- */
+/* --- ANIMATION DEFINITION (Used for both the message and the card) --- */
+/* ------------------------------------------- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px); 
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); 
+    }
+}
+
+/* --- 1. Main Landing Page Container (Desktop Setup) --- */
+/* NOTE: Applying flex properties here based on your provided JSX structure where 
+   .message and .login-card are direct children. */
+.login-landing-page {
+    min-height: 100vh;
+    width: 100%;
+    background-color: var(--background-light); 
+    
+    /* Desktop Layout: Side-by-side components */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 15vh; 
+    padding-bottom: 30px;
+    gap: 70px; /* Space between message and card */
+}
+
+/* --- 3. The Message Panel (Left Side - Branding) --- */
+.message {
+    flex-shrink: 0; 
+    width: 100%;
+    max-width: 480px; 
+    text-align: left;
+    padding-top: 50px; 
+    opacity: 0; 
+    /* ANIMATION APPLIED: Fades in with a 0.3s delay */
+    animation: fadeIn 1s ease-out 0.3s forwards; 
+}
+
+.message h1 {
+    font-size: 3.5rem; 
+    color: var(--primary-color);
+    margin-bottom: 5px;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.message p {
+    font-size: 1.5rem; 
+    color: var(--text-dark);
+    font-weight: 400;
+}
+
+
+/* --- 4. The Form Card Wrapper (Right Side) --- */
+.login-card {
+    background-color: var(--card-background);
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1); 
+    padding: 20px; 
+    width: 100%;
+    max-width: 396px; 
+    flex-shrink: 0;
+    
+    opacity: 0; 
+    /* ANIMATION APPLIED: Fades in with a slightly longer 0.6s delay */
+    animation: fadeIn 1s ease-out 0.6s forwards; 
+}
+
+/* --- 5. The Form inside the Card (Single Column Layout) --- */
+.login-card form {
+    display: flex; 
+    flex-direction: column;
+    gap: 15px; /* Increased gap since there are fewer fields */
+}
+
+/* --- 6. Input Field Groups --- */
+label {
+    display: none; /* Hide labels, relying on placeholder */
+}
+
+input {
+    width: 100%;
+    padding: 14px 16px; 
+    border: 1px solid #dddfe2;
+    border-radius: 6px; 
+    font-size: 17px;
+    color: var(--text-dark);
+    transition: all 0.15s ease-in-out; 
+}
+
+input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
+    outline: none;
+}
+
+/* --- 7. Submit Button (PRIMARY BLUE for Login) --- */
+.login-card button[type="submit"] {
+    background-color: var(--primary-color); /* Blue for Login */
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px; 
+    transition: background-color 0.2s;
+}
+.error-displayer {
+    display: flex;
+    height: 7px;
+    font-size: large;
+    align-items: center;
+    place-content: center;
+    
+}
+
+.error-displayer p {
+    color: red;
+    text-align: center;
+}
+
+.login-card button[type="submit"]:hover:not(:disabled) {
+    background-color: #145cb5;
+}
+
+.login-card button[type="submit"]:disabled {
+    background-color: #a0c3e8;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* --- 9. Links / Navigation (Tighter Spacing with Separator) --- */
+.links {
+    margin-top: 20px; 
+    padding-top: 15px; 
+    text-align: center;
+    font-size: 15px;
+    color: #6b7280;
+    border-top: 1px solid #dadde1; /* Horizontal line separator */
+}
+
+.links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.2s;
+}
+
+/* ------------------------------------------- */
+/* --- 10. MOBILE RESPONSIVENESS (<= 980px) --- */
+/* ------------------------------------------- */
+@media (max-width: 980px) {
+    
+    /* Disable animation on mobile devices for performance and immediate visibility */
+    .message, .login-card {
+        animation: none !important; 
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+
+    /* Stacked layout and full-height fit adjustments for mobile */
+    .login-landing-page {
+        flex-direction: column;
+        padding-top: 0; 
+        align-items: flex-start;
+        min-height: 100vh;
+        justify-content: space-evenly;
+        gap: 0; /* Remove gap when stacking */
+    }
+
+
+    /* Message compression for mobile */
+    .message {
+        text-align: center; 
+        padding: 5vh 15px 0 15px; 
+        max-width: none;
+    }
+    
+    .message h1 { font-size: 1.8rem; }
+    .message p { font-size: 1rem; }
+    
+    /* Form Card adjustments for single-page fit on mobile */
+    .login-card {
+        width: 100%;
+        max-width: none;
+        border-radius: 0;
+        box-shadow: none; 
+        padding: 20px 15px; 
+    }
+
+    /* Tighter spacing for mobile form */
+    .login-card form {
+        gap: 10px; 
+    }
+    
+    .login-card .links {
+        margin-top: 10px;
+    }
+    .error-displayer p {
+        color: red;
+        text-align: center;
+    }
+}

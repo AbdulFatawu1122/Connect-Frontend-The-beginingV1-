@@ -1,0 +1,109 @@
+import { React, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import "../css/login.css";
+import Home from "./home";
+
+const BASE_URL = "http://192.168.8.114:8000";
+
+
+
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // For navigating to protected page
+  const navigate = useNavigate();
+
+  //Function to validate form before submitting
+  const validateForm = () => {
+    if (!email || !password) {
+      setError("email and password required");
+      return false;
+    }
+    setError("");
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    setLoading(true);
+
+    const formDetails = new URLSearchParams();
+    formDetails.append("username", email.toLocaleLowerCase()),
+      formDetails.append("password", password);
+
+    try {
+      const response = await fetch(`${BASE_URL}/auth/token`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formDetails,
+      });
+
+      setLoading(false);
+      if (response.ok) {
+        const data = await response.json();
+        sessionStorage.setItem("token", data.access_token);
+        //alert("LogIn Succefully");
+       // console.log(data.access_token);
+        navigate("/");
+      } else {
+        setError("Email or password Incorrect");
+      }
+    } catch (error) {
+      setLoading(false);
+      setError("An error occured while authenticating, try again");
+    }
+  };
+
+  return (
+    <div className="login-landing-page">
+      <div className="content-wrapper"></div>
+      <div className="message">
+        <h1>Welecome to Connect 2.0</h1>
+        <p>Connecting you to the world of AI</p>
+      </div>
+      <div className="login-card">
+        <h1>Login</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="email">
+            <label>Email</label>
+            <input
+              placeholder="Email....."
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="email">
+            <label>Password</label>
+            <input
+              placeholder="Password....."
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <button type="submit" disabled={loading}>
+            {loading ? "Login In...." : "Login"}
+          </button>
+          <div className="error-displayer">
+            {error && <p style={{ color: "red" }}>{error}</p>}
+          </div>
+          <div className="links">
+            Dont have account, SignUp <Link to="/signup">here</Link>
+          </div>
+        </form>
+      </div>
+      <div />
+    </div>
+  );
+}
+
+export default Login;

@@ -1,0 +1,142 @@
+/* -------------------------------------------------------------------
+   Facebook Style Navbar Structure
+   ------------------------------------------------------------------- */
+
+.navbar {
+    /* Fixed position at the top, spans full width */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    
+    /* Facebook header colors */
+    background-color: #ffffff;
+    border-bottom: 1px solid #dddfe2; /* Light separator line */
+    
+    /* Flex container for the three main sections (Left, Center, Right) */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px; /* Horizontal padding */
+    height: 56px; /* Standard fixed height for desktop */
+    z-index: 1000; /* Ensure it stays on top of other content */
+    font-family: 'Inter', sans-serif;
+}
+
+/* -------------------------------------------------------------------
+   Left Section: Logo
+   ------------------------------------------------------------------- */
+
+.left-logo {
+    display: flex;
+    align-items: center;
+    /* Maintained sizing for desktop symmetry */
+    flex-grow: 0;
+    flex-basis: 25%; 
+}
+
+.left-logo p {
+    /* Styles the 'J' text as the Facebook logo */
+    color: #1877f2; /* Facebook Blue */
+    font-size: 32px;
+    font-weight: 800;
+    margin: 0; /* Remove default margin from p tag */
+}
+
+/* -------------------------------------------------------------------
+   Center Section: Navigation Links (Home, Profile, Friends)
+   ------------------------------------------------------------------- */
+
+.middle-items {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    flex-basis: 50%; /* Takes about half the width on desktop */
+    height: 100%;
+}
+
+.middle-items a {
+    /* Base styling for each navigation link/tab */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    height: 100%;
+    text-decoration: none;
+    color: #606770; /* Gray for inactive links/icons */
+    font-weight: 600;
+    font-size: 14px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.middle-items a:hover {
+    background-color: #f0f2f5;
+    border-radius: 8px;
+}
+
+/* Style for the active (current page) tab (You will need to add a class 'active' in React) */
+.middle-items a.active {
+    color: #1877f2; /* Blue text/icon for active link */
+    border-bottom: 3px solid #1877f2;
+    margin-top: 3px; /* To compensate for border width */
+}
+
+
+/* -------------------------------------------------------------------
+   Right Section: Logout
+   ------------------------------------------------------------------- */
+
+.right-items {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-basis: 25%;
+}
+
+.right-items a {
+    /* General styling for the Logout Link */
+    text-decoration: none;
+    color: #1877f2; /* Blue for action link */
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.right-items a:hover {
+    background-color: #f0f2f5;
+}
+
+
+/* -------------------------------------------------------------------
+   Mobile Responsiveness (Below 768px)
+   ------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 10px;
+    }
+    
+    .left-logo,
+    .right-items {
+        flex-basis: auto;
+    }
+    
+    /* On mobile, center links often take up the whole center space */
+    .middle-items {
+        flex-grow: 1;
+        justify-content: space-around; /* Distribute links evenly */
+    }
+
+    .middle-items a {
+        padding: 0 5px; /* Less padding on small screens */
+    }
+
+    .middle-items a.active {
+        /* Ensure mobile active indicator is subtle */
+        border-bottom: 2px solid #1877f2; 
+    }
+}
