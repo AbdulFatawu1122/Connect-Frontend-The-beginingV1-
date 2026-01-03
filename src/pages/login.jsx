@@ -49,6 +49,7 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         sessionStorage.setItem("token", data.access_token);
+  
         //alert("LogIn Succefully");
        // console.log(data.access_token);
         navigate("/");
