@@ -103,8 +103,10 @@ function SignUp() {
       if (response.ok) {
         alert("Account Created Succefully, We will try to log you In, if faild, use you details to log In");
         LogMeIn();
-      } else {
-        setError("Email already in Used, Use the details to logIn");
+      } else if (response.status === 422) {
+        setError("Date is Invalid")
+      } else if (response.status === 409) {
+        setError("Email already in used")
       }
     } catch (error) {
       setLoading(false);

@@ -23,6 +23,7 @@ function FeedCard({ feed }) {
     }
   };
 
+
   return (
     <div className="post-card">
       <div className="card-container">

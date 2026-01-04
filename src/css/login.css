@@ -1,7 +1,5 @@
 /* --- Global Variables and Base Setup (Consistent with Sign Up) --- */
-* {
-    box-sizing: border-box; 
-}
+
 
 :root {
     --primary-color: #1877F2; /* Login Button & Brand Blue */

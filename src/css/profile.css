@@ -1,1 +1,54 @@
 
+
+
+.update-info {
+    background-color: red;
+    padding: 20px;
+}
+
+.update-info label {
+    display: block;
+}
+
+.update-info input {
+    height: 20px;
+    width: 200px;
+}
+
+textarea {
+    height: 200px;
+    width:100% ;
+    font-size: 20px;
+    padding-left: 20px;
+}
+
+button {
+    padding: 20px;
+}
+
+.date-of-birth, .town, .bio, .middlname, .submit-button {
+    padding-top: 20px;
+    width: 90%;
+    font-size: 20px;
+}
+
+.update-info input {
+    height: 60px;
+    width: 95%;
+}
+
+.lockers {
+    display: flex;
+    gap: 20px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+.lock {
+    background-color: rgb(191, 19, 19);
+    font-size: large;
+    color: rgb(240, 248, 255);
+}
+.unlock {
+    background-color: green;
+    font-size: large;
+}

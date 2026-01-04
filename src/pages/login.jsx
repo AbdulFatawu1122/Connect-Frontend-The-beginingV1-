@@ -53,9 +53,12 @@ function Login() {
         //alert("LogIn Succefully");
        // console.log(data.access_token);
         navigate("/");
-      } else {
+      } else if (response.status === 401) {
         setError("Email or password Incorrect");
+      } else {
+        setError("Something Went wrong, Try again")
       }
+
     } catch (error) {
       setLoading(false);
       setError("An error occured while authenticating, try again");
