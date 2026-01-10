@@ -1,5 +1,5 @@
 import TimeAgo from "react-timeago";
-import "../css/home1.css";
+import styles from "../css/feed_card_for_profile.module.css";
 import { Link } from "react-router-dom";
 
 const BASE_URL = "http://192.168.8.114:8000";
@@ -7,21 +7,21 @@ const BASE_URL = "http://192.168.8.114:8000";
 function FeedCardForProfile({ feed }) {
 
   return (
-    <div className="post-card">
-      <div className="card-container">
-        <div className="profile">
-          <div className="profile-image"></div>
-          <div className="info">
-            <div className="profile-name-time">
-              <p className="name">
+    <div className={styles.post_card}>
+      <div className={styles.card_container}>
+        <div className={styles.profile}>
+          <div className={styles.profile_image}></div>
+          <div className={styles.info}>
+            <div className={styles.profile_name_time}>
+              <p className={styles.name}>
                 <Link style={{textDecoration:"none"}} to={`/user/${feed.user.id}`}>{feed.user.firstname} {feed.user.lastname}</Link>
               </p>
-              <p className="time-ago">
+              <p className={styles.time_ago}>
                 <TimeAgo date={feed.time_created} />
               </p>
             </div>
           </div>
-          <div className="firend-stats">
+          <div className={styles.firend_stats}>
             {feed.is_friends === "friend" ? (
               <p style={{ color: "red" }}>Friends</p>
             ) : feed.is_friends == "not friend" ? (
@@ -31,10 +31,10 @@ function FeedCardForProfile({ feed }) {
             )}
           </div>
         </div>
-        <div className="post-description">
+        <div className={styles.post_description}>
           <p>{feed.post_description}</p>
         </div>
-        <div className="post-media">
+        <div className={styles.post_media}>
           {feed.media.map((media) => {
             const IsImage = media.filetype === "image";
 

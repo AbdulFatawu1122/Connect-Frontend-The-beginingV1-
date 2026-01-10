@@ -1,12 +1,10 @@
-/* --- Global Reset and Box-Sizing --- */
-* {
-    box-sizing: border-box; 
-}
+/* --- Global Variables and Base Setup (Consistent with Sign Up) --- */
+
 
 :root {
-    --primary-color: #1877F2; /* Facebook Blue */
-    --accent-color: #28a745;  /* Green for success (Sign Up) */
-    --background-light: #f0f2f5; /* Light grey background */
+    --primary-color: #1877F2; /* Login Button & Brand Blue */
+    --accent-color: #28a745;  /* Used for Sign Up / Secondary Actions */
+    --background-light: #f0f2f5; 
     --card-background: #ffffff;
     --text-dark: #333333;
 }
@@ -24,38 +22,32 @@ body {
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px); /* Starts slightly below its final position */
+        transform: translateY(20px); 
     }
     to {
         opacity: 1;
-        transform: translateY(0); /* Ends at its final position */
+        transform: translateY(0); 
     }
 }
 
 /* --- 1. Main Landing Page Container (Desktop Setup) --- */
-.sign-up-landing-page {
+/* NOTE: Applying flex properties here based on your provided JSX structure where 
+   .message and .login-card are direct children. */
+.login_landing_page {
     min-height: 100vh;
     width: 100%;
     background-color: var(--background-light); 
     
+    /* Desktop Layout: Side-by-side components */
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Aligns content block towards the top */
-    padding-top: 15vh; /* Pushes the entire content block down 15% from the top */
+    align-items: flex-start;
+    padding-top: 15vh; 
     padding-bottom: 30px;
+    gap: 70px; /* Space between message and card */
 }
 
-/* --- 2. Content Wrapper (Manages Side-by-Side Layout on Desktop) --- */
-.content-wrapper {
-    display: flex;
-    gap: 10px; /* Space between message and card */
-    align-items: flex-start; /* Ensures both items align at the top */
-    width: 100%;
-    max-width: 980px; 
-}
-
-
-/* --- 3. The Message Panel (Left Side) --- */
+/* --- 3. The Message Panel (Left Side - Branding) --- */
 .message {
     flex-shrink: 0; 
     width: 100%;
@@ -83,7 +75,7 @@ body {
 
 
 /* --- 4. The Form Card Wrapper (Right Side) --- */
-.sign-up-card {
+.login_card {
     background-color: var(--card-background);
     border-radius: 8px; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1); 
@@ -97,28 +89,31 @@ body {
     animation: fadeIn 1s ease-out 0.6s forwards; 
 }
 
-/* --- 5. The Form inside the Card (DESKTOP GRID LAYOUT) --- */
-.sign-up-card form {
-    display: grid; 
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px; 
+/* --- 5. The Form inside the Card (Single Column Layout) --- */
+.login_card form {
+    display: flex; 
+    flex-direction: column;
+    gap: 15px; /* Increased gap since there are fewer fields */
 }
-
-/* Force full-width elements to span both columns */
-.sign-up-card .email,
-.sign-up-card .password,
-.sign-up-card button[type="submit"],
-.sign-up-card {
-    grid-column: 1 / -1; 
-}
-
 
 /* --- 6. Input Field Groups --- */
-label {
-    display: none;
+.password label {
+    display: none; /* Hide labels, relying on placeholder */
+}
+.email label {
+    display: none; /* Hide labels, relying on placeholder */
 }
 
-input {
+.email input {
+    width: 100%;
+    padding: 14px 16px; 
+    border: 1px solid #dddfe2;
+    border-radius: 6px; 
+    font-size: 17px;
+    color: var(--text-dark);
+    transition: all 0.15s ease-in-out; 
+}
+.password input {
     width: 100%;
     padding: 14px 16px; 
     border: 1px solid #dddfe2;
@@ -128,15 +123,15 @@ input {
     transition: all 0.15s ease-in-out; 
 }
 
-input:focus {
+.email, .password :focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 1px var(--primary-color);
     outline: none;
 }
 
-/* --- 7. Submit Button --- */
-.sign-up-card button[type="submit"] {
-    background-color: var(--accent-color);
+/* --- 7. Submit Button (PRIMARY BLUE for Login) --- */
+.login_card button[type="submit"] {
+    background-color: var(--primary-color); /* Blue for Login */
     color: white;
     padding: 14px 20px;
     border: none;
@@ -147,9 +142,28 @@ input:focus {
     margin-top: 10px; 
     transition: background-color 0.2s;
 }
+.error_displayer {
+    display: flex;
+    height: 7px;
+    font-size: large;
+    align-items: center;
+    place-content: center;
+    
+}
 
-.sign-up-card button[type="submit"]:hover:not(:disabled) {
-    background-color: #1e8734;
+.error_displayer p {
+    color: red;
+    text-align: center;
+}
+
+.login_card button[type="submit"]:hover:not(:disabled) {
+    background-color: #145cb5;
+}
+
+.login_card button[type="submit"]:disabled {
+    background-color: #a0c3e8;
+    cursor: not-allowed;
+    opacity: 0.8;
 }
 
 /* --- 9. Links / Navigation (Tighter Spacing with Separator) --- */
@@ -159,7 +173,7 @@ input:focus {
     text-align: center;
     font-size: 15px;
     color: #6b7280;
-    border-top: 1px solid #dadde1; 
+    border-top: 1px solid #dadde1; /* Horizontal line separator */
 }
 
 .links a {
@@ -168,45 +182,31 @@ input:focus {
     font-weight: 700;
     transition: color 0.2s;
 }
-.error-displayer {
-    padding: 25px;
-}
-
-.error-displayer p {
-    text-align: center;
-    color: rgb(95, 58, 58);
-}
 
 /* ------------------------------------------- */
 /* --- 10. MOBILE RESPONSIVENESS (<= 980px) --- */
 /* ------------------------------------------- */
-@media (max-width: 958px) {
+@media (max-width: 980px) {
     
     /* Disable animation on mobile devices for performance and immediate visibility */
-    .message, .sign-up-card {
+    .message, .login_card {
         animation: none !important; 
         opacity: 1 !important;
         transform: translateY(0) !important;
     }
 
-    /* Stacked layout and full-height fit adjustments... */
-    .sign-up-landing-page {
+    /* Stacked layout and full-height fit adjustments for mobile */
+    .login_landing_page {
+        flex-direction: column;
         padding-top: 0; 
         align-items: flex-start;
         min-height: 100vh;
-        justify-content: center;
-    }
-    
-    .content-wrapper {
-        flex-direction: column;
-        gap: 0; 
-        max-width: 980px; 
-        width: 510px;
-        justify-content: center;
-        align-items: center;
-
+        justify-content: space-evenly;
+        gap: 0; /* Remove gap when stacking */
     }
 
+
+    /* Message compression for mobile */
     .message {
         text-align: center; 
         padding: 5vh 15px 0 15px; 
@@ -216,7 +216,8 @@ input:focus {
     .message h1 { font-size: 1.8rem; }
     .message p { font-size: 1rem; }
     
-    .sign-up-card {
+    /* Form Card adjustments for single-page fit on mobile */
+    .login_card {
         width: 100%;
         max-width: none;
         border-radius: 0;
@@ -224,21 +225,16 @@ input:focus {
         padding: 20px 15px; 
     }
 
-    .sign-up-card form {
-        display: flex;
-        flex-direction: column;
-        gap: 8px; 
+    /* Tighter spacing for mobile form */
+    .login_card form {
+        gap: 10px; 
     }
     
-    .sign-up-card .links {
+    .login_card .links {
         margin-top: 10px;
     }
-
-    /* Reset grid spanning rules */
-    .sign-up-card .email, .sign-up-card .password, .sign-up-card button[type="submit"], .sign-up-card .error-display {
-        grid-column: auto;
-    }
-    .error-display {
-        background-color: black;
+    .error_displayer p {
+        color: red;
+        text-align: center;
     }
 }

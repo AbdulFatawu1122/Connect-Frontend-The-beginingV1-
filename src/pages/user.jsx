@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../components/navbar";
-import "../css/profile.css";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { useParams } from "react-router-dom";
@@ -15,16 +14,7 @@ function User() {
   const [currentUser, setCurrentUser] = useState([]);
   const [userPost, setUserPost] = useState([]);
 
-  const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [creatingpost, setCreatingPost] = useState(false);
-  const [formSubmitionError, setFormSubmitionError] = useState("");
-  const [hasMore, setHasMore] = useState(true); //if a page have more posts
-  const [posts, setPosts] = useState([]);
-  const [showCreate, setShowCreate] = useState(false);
-  const [postDescription, setPostDescription] = useState("");
-  const [mediaFiles, setMediaFiles] = useState([]);
-  const [expandedPosts, setExpandedPosts] = useState({});
+
 
   const [friends, setFriends] = useState([]);
 
@@ -141,6 +131,8 @@ function User() {
       console.log("Fail to load friends");
     }
   };
+
+  
 
   useEffect(() => {
     verify_token();

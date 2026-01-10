@@ -1,0 +1,318 @@
+body {
+    background-color: white;
+}
+
+.main-body {
+    padding-top: 50px;
+}
+
+.setting-text {
+    font-size: large;
+    font-style: italic;
+    color: blue;
+}
+.setting-text h1 {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+.line-above-settings-text {
+    background-color: red;
+    height: 1px;
+}
+
+
+
+
+
+/*On Showing Update User Profile */
+/* =========================================
+   1. The Overlay (Backdrop)
+   ========================================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Darker backdrop */
+  
+  /* Modern Blur Effect (Frosted Glass) */
+  backdrop-filter: blur(8px); 
+  -webkit-backdrop-filter: blur(8px); /* Fix for iPhones */
+  
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 1.0s ease-out;
+}
+
+/* =========================================
+   2. The Card (The "Big" Look)
+   ========================================= */
+.update-info {
+  position: relative; /* Needed for close button positioning */
+  background: white;
+  
+  /* Responsive Size logic */
+  width: 85%;
+  max-width: 420px;
+  max-height: 85vh;
+  
+  padding: 40px 30px 30px 30px; 
+  border-radius: 24px; /* Very round, modern corners */
+  overflow-y: auto;
+  
+  /* The "Premium" Shadow */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* The Spring Animation */
+  animation: slideUpSpring 1.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* =========================================
+   3. The Close Button (Infinite Loop on Hover)
+   ========================================= */
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+}
+
+.close-button button {
+  background: #f1f5f9;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  transition: background 0.3s, color 0.3s; /* Smooth color change */
+}
+
+/* --- THE NEW ANIMATION MAGIC --- */
+.close-button button:hover {
+  background: #ffecf0; /* Light red background */
+  color: #e11d48;      /* Red icon */
+  
+  /* This keeps it spinning forever while hovering */
+  animation: spinInfinite 2s linear infinite; 
+}
+
+/* =========================================
+   4. Form & Typography
+   ========================================= */
+.update-info fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+}
+
+.update-info label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  margin-left: 4px;
+}
+
+/* =========================================
+   5. The "Magic" Icons (CSS Only)
+   ========================================= */
+.middlename, .bio, .town, .date-of-birth {
+  position: relative; 
+}
+
+/* Common icon style */
+.middlename::after, 
+.bio::after, 
+.town::after, 
+.date-of-birth::after {
+  position: absolute;
+  left: 14px; 
+  color: #94a3b8; 
+  font-size: 1.1rem;
+  pointer-events: none; /* Click through to input */
+}
+
+/* Positioning */
+.middlename::after, .town::after, .date-of-birth::after {
+  bottom: 14px; 
+}
+.bio::after {
+  top: 42px; 
+}
+
+/* The Icons */
+.middlename::after { content: "👤"; }
+.bio::after        { content: "📝"; }
+.town::after       { content: "📍"; }
+.date-of-birth::after { content: "📅"; }
+
+
+/* =========================================
+   6. Inputs (Style to fit the icons)
+   ========================================= */
+.update-info input, textarea {
+  width: 100%;
+  background-color: #f8fafc; 
+  border: 2px solid transparent; 
+  border-radius: 12px;
+  padding: 14px 14px 14px 45px; /* Room for icon */
+  font-size: 1rem;
+  color: #334155;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.update-info textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Focus Glow */
+.update-info input:focus, textarea:focus {
+  background-color: #ffffff;
+  border-color: #3b82f6; 
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); 
+}
+
+/* =========================================
+   7. Submit Button (Gradient)
+   ========================================= */
+.submit-button {
+  margin-top: 10px;
+}
+
+.submit-button button {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.submit-button button:hover {
+  transform: translateY(-2px); 
+  box-shadow: 0 15px 20px -3px rgba(37, 99, 235, 0.4);
+}
+
+.submit-button button:active {
+  transform: translateY(0);
+}
+
+/* =========================================
+   8. Animation Keyframes
+   ========================================= */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUpSpring {
+  0% { 
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* The Continuous Spin Loop */
+@keyframes spinInfinite {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+
+/* =========================================
+   9. The Loading Overlay (Glass Effect)
+   ========================================= */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* Semi-transparent white background */
+  background-color: rgba(255, 255, 255, 0.85); 
+  backdrop-filter: blur(5px); /* Blurs the form behind it */
+  
+  z-index: 50; /* Sits on top of the form inputs */
+  
+  /* Center the spinner */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  border-radius: 24px; /* Matches your card corners */
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Text styling under the spinner */
+.loading-overlay p {
+  margin-top: 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #3b82f6; /* Blue text to match */
+  letter-spacing: 0.5px;
+  animation: pulseText 1.5s infinite ease-in-out;
+}
+
+/* =========================================
+   10. The Spinner Animation
+   ========================================= */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  
+  /* The "Track" (Light Grey) */
+  border: 4px solid #e2e8f0;
+  
+  /* The "Spinner" (Gradient Blue) */
+  border-top-color: #3b82f6;
+  border-right-color: #2563eb; 
+  
+  /* The Glow Effect */
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.2);
+  
+  animation: spinPremium 0.8s linear infinite;
+}
+
+/* =========================================
+   11. Loading Keyframes
+   ========================================= */
+@keyframes spinPremium {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulseText {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

@@ -7,6 +7,7 @@ import Profile from "./pages/profile";
 import Protected from "./pages/protected";
 import FriendsPage from "./pages/friends";
 import User from "./pages/user";
+import Settings from "./pages/settings";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/friends" element={<FriendsPage />} />
+          <Route path="/settings/:user_id" element={<Settings />}/>
         </Routes>
       </main>
     </div>

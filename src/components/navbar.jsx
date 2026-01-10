@@ -1,23 +1,24 @@
 import { Link } from "react-router-dom";
-import "../css/navbar.css";
+import styles from "../css/navbar.module.css";
 import { useEffect, useState } from "react";
 const BASE_URL = "http://192.168.8.114:8000";
 
 function NavBar() {
   return (
     <div>
-      <div className="navbar">
-        <div className="left-logo">
+      <div className={styles.navbar}>
+        <div className={styles.left_logo}>
           <Link to={"/"} style={{textDecoration:'none'}}><p>J</p></Link>
         </div>
-        <div className="middle-items">
-          <Link to={"/"}>Home 🏡</Link>
-          <Link to={"/profile"}>Profile👤</Link>
-          <Link to={"/friends"}>Friends👥</Link>
+        <div className={styles.middle_items}>
+          <Link title="Home, Feed, Love❤️" to={"/"}>Home 🏡</Link>
+          <Link title="Your Profile, Post and timeline" to={"/profile"}>Profile👤</Link>
+          <Link title="Checks on Your friends, add new and accept request" to={"/friends"}>Friends👥</Link>
         </div>
 
-        <div className="right-items">
+        <div className={styles.right_items}>
           <Link
+            title="Logout from Connect"
             to={"/login"}
             onClick={() => sessionStorage.removeItem("token")}
           >

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import "../css/signup.css";
+import styles from  "../css/signup.module.css";
 
 const BASE_URL = "http://192.168.8.114:8000";
 
@@ -12,7 +12,7 @@ function SignUp() {
   const [lastname, setLastName] = useState("");
   const [age, setAge] = useState("");
   const [password, setPassword] = useState("");
-  const [date_of_birth, setDateofBirth] = useState("");
+  const [date_of_birth, setDateofBirth] = useState(new Date);
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -115,17 +115,17 @@ function SignUp() {
   };
 
   return (
-    <div className="sign-up-landing-page">
-      <div className="content-wrapper">
-        <div className="message">
+    <div className={styles.sign_up_landing_page}>
+      <div className={styles.content_wrapper}>
+        <div className={styles.message}>
           <h1>Welecome to Connect 2.0</h1>
           <p>Connecting you to the world of AI</p>
           <p>Open New account to Connect</p>
         </div>
 
-        <div className="sign-up-card">
+        <div className={styles.sign_up_card}>
           <form onSubmit={handleSubmit}>
-            <div className="email">
+            <div className={email}>
               <label>Email</label>
               <input
                 placeholder="Email..."
@@ -135,7 +135,7 @@ function SignUp() {
               />
             </div>
 
-            <div className="firstname">
+            <div className={styles.firstname}>
               <label>First Name</label>
               <input
                 type="text"
@@ -145,7 +145,7 @@ function SignUp() {
               />
             </div>
 
-            <div className="lastname">
+            <div className={styles.lastname}>
               <label>Last Name</label>
               <input
                 type="text"
@@ -155,7 +155,7 @@ function SignUp() {
               />
             </div>
 
-            <div className="date-of-bith">
+            <div className={styles.date_of_bith}>
               <label>Date of Birth</label>
               <input
                 type="date"
@@ -164,17 +164,16 @@ function SignUp() {
               />
             </div>
 
-            <div className="age">
+            <div className={styles.age}>
               <label>Age</label>
               <input
                 type="number"
-                placeholder="Age..."
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
               />
             </div>
 
-            <div className="password">
+            <div className={styles.password}>
               <label>Password</label>
               <input
                 type="password"
@@ -188,10 +187,10 @@ function SignUp() {
               {loading ? "Creating Account....." : "Create Account"}
             </button>
           </form>
-          <div className="error-displayer">
+          <div className={styles.error_displayer}>
             {error && <p style={{ color: "red" }}>{error}</p>}
           </div>
-          <div className="links">
+          <div className={styles.links}>
             Have an account, LogIn <Link to="/login">here</Link>
           </div>
         </div>

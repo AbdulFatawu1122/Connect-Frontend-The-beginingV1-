@@ -27,7 +27,7 @@
    Left Section: Logo
    ------------------------------------------------------------------- */
 
-.left-logo {
+.left_logo {
     display: flex;
     align-items: center;
     /* Maintained sizing for desktop symmetry */
@@ -35,7 +35,7 @@
     flex-basis: 25%; 
 }
 
-.left-logo p {
+.left_logo p {
     /* Styles the 'J' text as the Facebook logo */
     color: #1877f2; /* Facebook Blue */
     font-size: 32px;
@@ -47,7 +47,7 @@
    Center Section: Navigation Links (Home, Profile, Friends)
    ------------------------------------------------------------------- */
 
-.middle-items {
+.middle_items {
     display: flex;
     justify-content: center;
     flex-grow: 1;
@@ -55,7 +55,7 @@
     height: 100%;
 }
 
-.middle-items a {
+.middle_items a {
     /* Base styling for each navigation link/tab */
     display: flex;
     align-items: center;
@@ -71,13 +71,13 @@
     transition: background-color 0.2s;
 }
 
-.middle-items a:hover {
+.middle_items a:hover {
     background-color: #f0f2f5;
     border-radius: 8px;
 }
 
 /* Style for the active (current page) tab (You will need to add a class 'active' in React) */
-.middle-items a.active {
+.middle_items a.active {
     color: #1877f2; /* Blue text/icon for active link */
     border-bottom: 3px solid #1877f2;
     margin-top: 3px; /* To compensate for border width */
@@ -88,14 +88,14 @@
    Right Section: Logout
    ------------------------------------------------------------------- */
 
-.right-items {
+.right_items {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     flex-basis: 25%;
 }
 
-.right-items a {
+.right_items a {
     /* General styling for the Logout Link */
     text-decoration: none;
     color: #1877f2; /* Blue for action link */
@@ -106,7 +106,7 @@
     transition: background-color 0.2s;
 }
 
-.right-items a:hover {
+.right_items a:hover {
     background-color: #f0f2f5;
 }
 
@@ -120,22 +120,22 @@
         padding: 0 10px;
     }
     
-    .left-logo,
-    .right-items {
+    .left_logo,
+    .right_items {
         flex-basis: auto;
     }
     
     /* On mobile, center links often take up the whole center space */
-    .middle-items {
+    .middle_items {
         flex-grow: 1;
         justify-content: space-around; /* Distribute links evenly */
     }
 
-    .middle-items a {
+    .middle_items a {
         padding: 0 5px; /* Less padding on small screens */
     }
 
-    .middle-items a.active {
+    .middle_items a.active {
         /* Ensure mobile active indicator is subtle */
         border-bottom: 2px solid #1877f2; 
     }

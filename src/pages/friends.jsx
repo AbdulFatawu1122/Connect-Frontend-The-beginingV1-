@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import NavBar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
-import "../css/friends.css"
+import styles from "../css/friends.module.css"
 const BASE_URL = "http://192.168.8.114:8000";
 import { Link } from "react-router-dom";
             
@@ -189,19 +189,19 @@ function FriendsPage() {
   //}, []);
 
   return (
-    <div className="friends-page">
-      <div className="navbar">
+    <div className={styles.friends_page}>
+      <div className={styles.navbar}>
         <NavBar />
       </div>
 
-      <div style={{ paddingTop: "80px" }} className="friend-content">
-        <div className="my-friends">
+      <div style={{ paddingTop: "80px" }} className={styles.friend_content}>
+        <div className={styles.my_friends}>
           <h1>My Friends</h1>
           <h3>You have {totla_firends} Friends</h3>
           {friends.map((friend) => (
-            <div key={friend.id} className="my-firends-list">
+            <div key={friend.id} className={styles.my_firends_list}>
               <Link style={{textDecoration:"none"}} to={`/user/${friend.id}`}>
-              <div className="info">
+              <div className={styles.info}>
                 {friend.firstname} {friend.lastname}
               </div>
               </Link>
@@ -209,15 +209,15 @@ function FriendsPage() {
           ))}
         </div>
 
-        <div className="add-new-friends">
+        <div className={styles.add_new_friends}>
           <h1>Add New Friends ({suggested_total}) </h1>
           {suggested.map((friend) => (
             <div key={friend.id}>
-              <div className="pro-img"></div>
-              <div className="info">
+              <div className={styles.pro_img}></div>
+              <div className={styles.info}>
                 <Link style={{textDecoration:"none"}} to={`/user/${friend.id}`}>{friend.firstname} {friend.lastname}</Link>
               </div>
-              <div className="add-button">
+              <div className={styles.add_button}>
                 <button onClick={() => handleAddFriend(friend.id)}>
                   Add Friend
                 </button>
@@ -226,14 +226,14 @@ function FriendsPage() {
           ))}
         </div>
 
-        <div className="friends-to-add">
+        <div className={styles.friends_to_add}>
           <h1>Friends To Accept({pending_total}) </h1>
           {pendingAccept.map((friend_to_accept) => (
             <div key={friend_to_accept.id}>
-              <div className="friends-info">
+              <div className={styles.friends_info}>
                 <Link style={{textDecoration:"none"}} to={`/user/${friend_to_accept.id}`}><h4>{friend_to_accept.firstname} </h4> </Link>
               </div>
-              <div className="accept-button">
+              <div className={styles.accept_button}>
                 <button onClick={() => handleAcceptFriend(friend_to_accept.id)}>
                   Accept Friend Request
                 </button>
@@ -242,12 +242,12 @@ function FriendsPage() {
           ))}
         </div>
 
-        <div className="pending-to-accept">
+        <div className={styles.pending_to_accept}>
           <h1>Pending Request ({requested_total}) </h1>
           {requestISendPending.map((friend, index) => (
             <div key={friend.id}>
               <Link style={{textDecoration:"none"}} to={`/user/${friend.id}`}><h4>{friend.firstname} {friend.lastname}</h4></Link>
-              <div className="add-button">
+              <div className={styles.add_button}>
                 <button>Cancel Request</button>
               </div>
             </div>
@@ -257,5 +257,4 @@ function FriendsPage() {
     </div>
   );
 }
-
 export default FriendsPage;

@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../components/navbar";
 import FeedCard from "../components/feed-card";
-//import "../css/profile.css";
+import styles from "../css/login.module.css";
+import { format, parseISO } from "date-fns";
+
 import { useNavigate } from "react-router-dom";
-import { format } from "date-fns";
 
 function Profile() {
   const BASE_URL = "http://192.168.8.114:8000";
@@ -25,33 +26,7 @@ function Profile() {
   const [mediaFiles, setMediaFiles] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState({});
 
-  //Updating Profile
-  const [middlename, setMiddleName] = useState("");
-  const [bio, setBio] = useState("");
-  const [date_of_birth, setDataOfBirth] = useState("");
-  const [town, setTown] = useState("");
-  const [isformDisable, setisformDisable] = useState(true);
-  const [foremerror, setformerror] = useState("");
-
-  const handleenbaleform = () => setisformDisable(false);
-  const handledisenbaleform = () => setisformDisable(true);
-
-  const validateForm = () => {
-    if (
-      !middlename ||
-      !bio ||
-      !town ||
-      !date_of_birth
-    ) {
-      setformerror("All fields Need to fill");
-      return false;
-    }
-    setformerror("");
-    return true;
-  };
-
   const [loadingUserPost, setLoadingUserPost] = useState(false);
-
 
   const navigate = useNavigate();
 
@@ -104,7 +79,7 @@ function Profile() {
 
       if (response.ok) {
         // console.log("Login");
-        fetchProfileelatedData();
+        // fetchProfileelatedData();
       } else {
         navigate("/login");
         sessionStorage.removeItem("token");
@@ -145,7 +120,7 @@ function Profile() {
       });
 
       const data = await user_profile.json();
-      //console.log(data);
+     // console.log(data);
       setProfileData(data);
     } catch (eeror) {
       console.log("Fail to Load Profile");
@@ -172,39 +147,6 @@ function Profile() {
     }
   };
 
-  const handleUpdateInfo = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-    const formDetails = {
-      middlename,
-      bio,
-      town,
-      date_of_birth,
-    };
-
-    try {
-      const token = sessionStorage.getItem("token");
-      const response = await fetch(`${BASE_URL}/user/profile`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "accept": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-        body: JSON.stringify(formDetails),
-      });
-
-      if (response.ok) {
-        alert("Your Info Have been Updated");
-        fetchProfileelatedData();
-        setisformDisable(true)
-      }
-    } catch (error) {
-      console.log("Error whilts updating Info", error);
-    }
-  };
-
   const fetchProfileelatedData = async () => {
     setLoadingProfileData(true);
     await fetchUserPosts();
@@ -221,14 +163,26 @@ function Profile() {
     fetchProfileelatedData();
   }, []);
 
+  const formatDate = (dateString) => {
+    // parseISO converts the string to a date object
+    const date_string = dateString;
+    const dateObject = parseISO(date_string);
+
+    const formatted_date = format(dateObject, "dd MMMM, yyyy");
+
+    return formatted_date;
+  };
+
   const feedLenght = () => {
     if (userPost.length >= 1) {
       return (
         <div>
           <h1>No more Post From You.</h1>
-          <h3>
-            Born on {format(Date(profileData.date_of_birth), "dd, MMMM yyyy")}
-          </h3>
+          <h1>Born on,{" "} 
+            {
+              profileData.date_of_birth ? (formatDate(profileData.date_of_birth)) : "Loading ......"
+            }
+             </h1>
         </div>
       );
     } else {
@@ -375,61 +329,6 @@ function Profile() {
           </form>
         )}
       </div>
-      <div className="lockers">
-        <button className="unlock" onClick={handleenbaleform} type="button">
-          Update Info
-        </button>
-        <button className="lock" onClick={handledisenbaleform} type="button">
-          Lock form
-        </button>
-      </div>
-
-      <div className="update-info">
-        <form onSubmit={handleUpdateInfo}>
-          <fieldset disabled={isformDisable}>
-            <div className="middlname">
-              <label>Middle Name</label>
-              <input
-                placeholder={profileData.middlename}
-                value={middlename}
-                onChange={(e) => setMiddleName(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="bio">
-              <label>BIO</label>
-              <textarea
-                placeholder={profileData.bio}
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-              />
-            </div>
-            <div className="town">
-              <label>Town</label>
-              <input
-                placeholder={profileData.town}
-                value={town}
-                onChange={(e) => setTown(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="date-of-birth">
-              <label>Date of Birth</label>
-              <input
-                type="date" 
-                value={date_of_birth}
-                onChange={(e) => setDataOfBirth(e.target.value)}
-                
-              />
-            </div>
-
-            <div className="submit-button">
-              <button type="submit"> Update Now</button>
-            </div>
-          </fieldset>
-        </form>
-      </div>
-
       {loadingProfileData ? (
         "Laoding User Profile Please Wait......"
       ) : (
@@ -446,11 +345,19 @@ function Profile() {
             <h3>Middle Name: {profileData.middlename} </h3>
             <h3>
               Date of Birth:{" "}
-              {format(Date(profileData.date_of_birth), "dd, MMMM yyyy")}{" "}
+              {profileData.date_of_birth
+                ? formatDate(profileData.date_of_birth)
+                : "Loading..."}
             </h3>
           </div>
         </div>
       )}
+
+      <div>
+        <h1>
+          <Link to={`/settings/${currentUser.id}`}>Settings</Link>
+        </h1>
+      </div>
 
       {loadingUserPost ? (
         FeedLoadingAninmate()

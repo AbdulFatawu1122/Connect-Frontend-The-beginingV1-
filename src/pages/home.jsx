@@ -6,7 +6,8 @@ import TimeAgo from "react-timeago"; // to caluculate a time ago post
 
 import { Link } from "react-router-dom";
 
-import "../css/home1.css";
+import styles from "../css/login.module.css";
+
 import { use } from "react";
 import FeedCard from "../components/feed-card";
 import NavBar from "../components/navbar";

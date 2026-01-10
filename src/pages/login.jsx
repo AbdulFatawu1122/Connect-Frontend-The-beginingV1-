@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import "../css/login.css";
+import styles from "../css/login.module.css";
 import Home from "./home";
 
 const BASE_URL = "http://192.168.8.114:8000";
@@ -66,16 +66,16 @@ function Login() {
   };
 
   return (
-    <div className="login-landing-page">
-      <div className="content-wrapper"></div>
-      <div className="message">
+    <div className={styles.login_landing_page}>
+      <div className={styles.content_wrapper}></div>
+      <div className={styles.message}>
         <h1>Welecome to Connect 2.0</h1>
         <p>Connecting you to the world of AI</p>
       </div>
-      <div className="login-card">
+      <div className={styles.login_card}>
         <h1>Login</h1>
         <form onSubmit={handleSubmit}>
-          <div className="email">
+          <div className={styles.email}>
             <label>Email</label>
             <input
               placeholder="Email....."
@@ -85,7 +85,7 @@ function Login() {
             />
           </div>
 
-          <div className="email">
+          <div className={styles.password}>
             <label>Password</label>
             <input
               placeholder="Password....."
@@ -97,10 +97,10 @@ function Login() {
           <button type="submit" disabled={loading}>
             {loading ? "Login In...." : "Login"}
           </button>
-          <div className="error-displayer">
+          <div className={styles.error_displayer}>
             {error && <p style={{ color: "red" }}>{error}</p>}
           </div>
-          <div className="links">
+          <div className={styles.links}>
             Dont have account, SignUp <Link to="/signup">here</Link>
           </div>
         </form>
