@@ -67,11 +67,13 @@ body {
     font-weight: 800;
 }
 
+
 .message p {
     font-size: 1.5rem; 
     color: var(--text-dark);
     font-weight: 400;
 }
+
 
 
 /* --- 4. The Form Card Wrapper (Right Side) --- */
@@ -144,8 +146,8 @@ body {
 }
 .error_displayer {
     display: flex;
-    height: 7px;
-    font-size: large;
+    height: 50px;
+    font-size: 20px;
     align-items: center;
     place-content: center;
     

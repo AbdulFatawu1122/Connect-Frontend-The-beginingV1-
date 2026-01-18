@@ -1,6 +1,8 @@
 import TimeAgo from "react-timeago";
 import styles from "../css/feed_card_for_profile.module.css";
 import { Link } from "react-router-dom";
+import ReactPlayer from "react-player"
+import {useInView} from "react-intersection-observer"
 
 const BASE_URL = "http://192.168.8.114:8000";
 
@@ -42,12 +44,14 @@ function FeedCardForProfile({ feed }) {
               <img
                 key={media.id}
                 src={`${BASE_URL}/src/uploads/${media.filename}`}
+                loading="lazy"
               />
             ) : (
               <video
                 controls
                 key={media.id}
                 src={`${BASE_URL}/src/uploads/${media.filename}`}
+                loading="lazy"
               />
             );
           })}

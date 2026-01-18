@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import NavBar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import FeedCardForProfile from "../components/feed-card-for-profile";
 
 const BASE_URL = "http://192.168.8.114:8000";
+
 
 function User() {
   const [profileData, setProfileData] = useState([]);
@@ -19,6 +20,9 @@ function User() {
   const [friends, setFriends] = useState([]);
 
   const navigate = useNavigate();
+
+  const location = useLocation()
+  const me_id = location.state?.user_id;
 
   // Get the user id from the URL
   const { user_id } = useParams();

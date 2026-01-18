@@ -2,24 +2,72 @@ body {
     background-color: white;
 }
 
-.main-body {
+.mainbody {
     padding-top: 50px;
 }
 
-.setting-text {
+.settingtext {
     font-size: large;
     font-style: italic;
     color: blue;
 }
-.setting-text h1 {
+.settingtext h1 {
     margin-bottom: 0;
     margin-top: 0;
 }
-.line-above-settings-text {
+.lineabovesettingstext {
     background-color: red;
     height: 1px;
 }
 
+.profielInfo {
+  height: 100%;
+  border-radius: 10px;
+  border: 2px solid black;
+  padding-left: 20px;
+
+}
+.profielInfo h3 {
+  margin-top: 0;
+  font-size: 25px;
+}
+.profielInfo h4 {
+ padding-bottom: 10px;
+}
+.userDetails {
+  height: 100%;
+  border-radius: 10px;
+  border: 2px solid black;
+  padding-left: 20px;
+}
+.userDetails h3 {
+  margin-top: 0;
+  font-size: 25px;
+}
+.userDetails h4 {
+  padding-bottom: 10px;
+}
+
+.settingsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 19px 10px 10px;
+}
+
+.updateButton {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.updateButton button {
+  width: 300px;
+  height: 50px;
+  background-color: green;
+  color: #ffecf0;
+  border-radius: 30px;
+}
 
 
 
@@ -28,7 +76,7 @@ body {
 /* =========================================
    1. The Overlay (Backdrop)
    ========================================= */
-.modal-overlay {
+.modaloverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -50,9 +98,9 @@ body {
 /* =========================================
    2. The Card (The "Big" Look)
    ========================================= */
-.update-info {
+.updateinfo {
   position: relative; /* Needed for close button positioning */
-  background: white;
+  background: rgb(11, 10, 45);
   
   /* Responsive Size logic */
   width: 85%;
@@ -73,14 +121,14 @@ body {
 /* =========================================
    3. The Close Button (Infinite Loop on Hover)
    ========================================= */
-.close-button {
+.closebutton {
   position: absolute;
   top: 15px;
   right: 15px;
   z-index: 10;
 }
 
-.close-button button {
+.closebutton button {
   background: #f1f5f9;
   border: none;
   width: 35px;
@@ -96,7 +144,7 @@ body {
 }
 
 /* --- THE NEW ANIMATION MAGIC --- */
-.close-button button:hover {
+.closebutton button:hover {
   background: #ffecf0; /* Light red background */
   color: #e11d48;      /* Red icon */
   
@@ -107,7 +155,7 @@ body {
 /* =========================================
    4. Form & Typography
    ========================================= */
-.update-info fieldset {
+.updateinfo fieldset {
   border: none;
   padding: 0;
   margin: 0;
@@ -116,7 +164,7 @@ body {
   gap: 20px; 
 }
 
-.update-info label {
+.updateinfo label {
   display: block;
   font-size: 0.8rem;
   font-weight: 700;
@@ -130,7 +178,7 @@ body {
 /* =========================================
    5. The "Magic" Icons (CSS Only)
    ========================================= */
-.middlename, .bio, .town, .date-of-birth {
+.middlename, .bio, .town, .dateofbirth {
   position: relative; 
 }
 
@@ -138,7 +186,7 @@ body {
 .middlename::after, 
 .bio::after, 
 .town::after, 
-.date-of-birth::after {
+.dateofbirth::after {
   position: absolute;
   left: 14px; 
   color: #94a3b8; 
@@ -147,7 +195,7 @@ body {
 }
 
 /* Positioning */
-.middlename::after, .town::after, .date-of-birth::after {
+.middlename::after, .town::after, .dateofbirth::after {
   bottom: 14px; 
 }
 .bio::after {
@@ -158,15 +206,15 @@ body {
 .middlename::after { content: "👤"; }
 .bio::after        { content: "📝"; }
 .town::after       { content: "📍"; }
-.date-of-birth::after { content: "📅"; }
+.dateofbirth::after { content: "📅"; }
 
 
 /* =========================================
    6. Inputs (Style to fit the icons)
    ========================================= */
-.update-info input, textarea {
+.updateinfo input, textarea {
   width: 100%;
-  background-color: #f8fafc; 
+  background-color: hwb(207 93% 3%); 
   border: 2px solid transparent; 
   border-radius: 12px;
   padding: 14px 14px 14px 45px; /* Room for icon */
@@ -178,13 +226,13 @@ body {
   font-family: inherit;
 }
 
-.update-info textarea {
+.updateinfo textarea {
   min-height: 100px;
   resize: vertical;
 }
 
 /* Focus Glow */
-.update-info input:focus, textarea:focus {
+.updateinfo input:focus, textarea:focus {
   background-color: #ffffff;
   border-color: #3b82f6; 
   outline: none;
@@ -194,11 +242,11 @@ body {
 /* =========================================
    7. Submit Button (Gradient)
    ========================================= */
-.submit-button {
+.submitbutton {
   margin-top: 10px;
 }
 
-.submit-button button {
+.submitbutton button {
   width: 100%;
   padding: 16px;
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
@@ -212,12 +260,12 @@ body {
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.submit-button button:hover {
+.submitbutton button:hover {
   transform: translateY(-2px); 
   box-shadow: 0 15px 20px -3px rgba(37, 99, 235, 0.4);
 }
 
-.submit-button button:active {
+.submitbutton button:active {
   transform: translateY(0);
 }
 
@@ -250,7 +298,7 @@ body {
 /* =========================================
    9. The Loading Overlay (Glass Effect)
    ========================================= */
-.loading-overlay {
+.loadingoverlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -274,7 +322,7 @@ body {
 }
 
 /* Text styling under the spinner */
-.loading-overlay p {
+.loadingoverlay p {
   margin-top: 15px;
   font-size: 1rem;
   font-weight: 600;

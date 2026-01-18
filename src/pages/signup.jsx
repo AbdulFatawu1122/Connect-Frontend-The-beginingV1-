@@ -6,6 +6,7 @@ import styles from  "../css/signup.module.css";
 
 const BASE_URL = "http://192.168.8.114:8000";
 
+
 function SignUp() {
   const [email, setEmail] = useState("");
   const [firstname, setFirstName] = useState("");
@@ -168,6 +169,7 @@ function SignUp() {
               <label>Age</label>
               <input
                 type="number"
+                placeholder="Age"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
               />

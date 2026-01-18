@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import NavBar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
-import styles from "../css/friends.module.css"
+import styles from "../css/friends.module.css";
 const BASE_URL = "http://192.168.8.114:8000";
+
+
 import { Link } from "react-router-dom";
-            
 
 function FriendsPage() {
   const [friends, setFriends] = useState([]);
@@ -12,6 +13,8 @@ function FriendsPage() {
   const [pendingAccept, setPendingAccept] = useState([]);
   const [requestISendPending, setRequestIsendPending] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [searchqQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
 
@@ -29,12 +32,12 @@ function FriendsPage() {
         // console.log("Login");
         //get_current_user();
         //fetch_profile();
-       // fetchFeed();
+        // fetchFeed();
       } else {
         navigate("/login");
       }
     } catch (error) {
-      console.log("Fail to verify Token")
+      console.log("Fail to verify Token");
     }
   };
 
@@ -50,7 +53,7 @@ function FriendsPage() {
       });
 
       const data = await friend_profile.json();
-     // console.log(data);
+      // console.log(data);
       setFriends(data);
     } catch (eeror) {
       console.log("Fail to load friends");
@@ -112,8 +115,7 @@ function FriendsPage() {
         }
       );
 
-
-       fetchFriendsRelatedData();
+      fetchFriendsRelatedData();
     } catch (error) {
       console.error("Failed to aceept Friend");
     }
@@ -164,7 +166,6 @@ function FriendsPage() {
     await Request_I_send_Pending();
   };
 
-
   useEffect(() => {
     fetchFriendsRelatedData();
 
@@ -177,14 +178,12 @@ function FriendsPage() {
     verify_token();
   }, [navigate]);
 
-  const totla_firends = friends.length
-  const suggested_total = suggested.length
-  const pending_total = pendingAccept.length
-  const requested_total = requestISendPending.length
+  const totla_firends = friends.length;
+  const suggested_total = suggested.length;
+  const pending_total = pendingAccept.length;
+  const requested_total = requestISendPending.length;
 
-
-
- // useEffect(() => {
+  // useEffect(() => {
   //  fetchFriendsRelatedData();
   //}, []);
 
@@ -200,10 +199,13 @@ function FriendsPage() {
           <h3>You have {totla_firends} Friends</h3>
           {friends.map((friend) => (
             <div key={friend.id} className={styles.my_firends_list}>
-              <Link style={{textDecoration:"none"}} to={`/user/${friend.id}`}>
-              <div className={styles.info}>
-                {friend.firstname} {friend.lastname}
-              </div>
+              <Link
+                style={{ textDecoration: "none" }}
+                to={`/user/${friend.id}`}
+              >
+                <div className={styles.info}>
+                  {friend.firstname} {friend.lastname}
+                </div>
               </Link>
             </div>
           ))}
@@ -211,19 +213,36 @@ function FriendsPage() {
 
         <div className={styles.add_new_friends}>
           <h1>Add New Friends ({suggested_total}) </h1>
-          {suggested.map((friend) => (
-            <div key={friend.id}>
-              <div className={styles.pro_img}></div>
-              <div className={styles.info}>
-                <Link style={{textDecoration:"none"}} to={`/user/${friend.id}`}>{friend.firstname} {friend.lastname}</Link>
-              </div>
-              <div className={styles.add_button}>
-                <button onClick={() => handleAddFriend(friend.id)}>
-                  Add Friend
-                </button>
-              </div>
-            </div>
-          ))}
+          <div className={styles.searchBar}>
+            <input
+              placeholder="Search For Friend"
+              type="text"
+              value={searchqQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <p>Searching for " {searchqQuery} "</p>
+          {suggested.map(
+            (friend) =>
+              friend.firstname.toLowerCase().includes(searchqQuery) && (
+                <div key={friend.id}>
+                  <div className={styles.pro_img}></div>
+                  <div className={styles.info}>
+                    <Link
+                      style={{ textDecoration: "none" }}
+                      to={`/user/${friend.id}`}
+                    >
+                      {friend.firstname} {friend.lastname}
+                    </Link>
+                  </div>
+                  <div className={styles.add_button}>
+                    <button onClick={() => handleAddFriend(friend.id)}>
+                      Add Friend
+                    </button>
+                  </div>
+                </div>
+              )
+          )}
         </div>
 
         <div className={styles.friends_to_add}>
@@ -231,7 +250,12 @@ function FriendsPage() {
           {pendingAccept.map((friend_to_accept) => (
             <div key={friend_to_accept.id}>
               <div className={styles.friends_info}>
-                <Link style={{textDecoration:"none"}} to={`/user/${friend_to_accept.id}`}><h4>{friend_to_accept.firstname} </h4> </Link>
+                <Link
+                  style={{ textDecoration: "none" }}
+                  to={`/user/${friend_to_accept.id}`}
+                >
+                  <h4>{friend_to_accept.firstname} </h4>{" "}
+                </Link>
               </div>
               <div className={styles.accept_button}>
                 <button onClick={() => handleAcceptFriend(friend_to_accept.id)}>
@@ -246,7 +270,14 @@ function FriendsPage() {
           <h1>Pending Request ({requested_total}) </h1>
           {requestISendPending.map((friend, index) => (
             <div key={friend.id}>
-              <Link style={{textDecoration:"none"}} to={`/user/${friend.id}`}><h4>{friend.firstname} {friend.lastname}</h4></Link>
+              <Link
+                style={{ textDecoration: "none" }}
+                to={`/user/${friend.id}`}
+              >
+                <h4>
+                  {friend.firstname} {friend.lastname}
+                </h4>
+              </Link>
               <div className={styles.add_button}>
                 <button>Cancel Request</button>
               </div>

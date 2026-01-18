@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 const BASE_URL = "http://192.168.8.114:8000";
 
+
 function FeedCard({ feed }) {
   const [showWarnindDialog, setShowWarningDialog] = useState(false);
 
@@ -126,12 +127,14 @@ function FeedCard({ feed }) {
               <img
                 key={media.id}
                 src={`${BASE_URL}/src/uploads/${media.filename}`}
+                loading="lazy"
               />
             ) : (
               <video
                 controls
                 key={media.id}
                 src={`${BASE_URL}/src/uploads/${media.filename}`}
+                loading="lazy"
               />
             );
           })}

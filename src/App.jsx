@@ -8,6 +8,7 @@ import Protected from "./pages/protected";
 import FriendsPage from "./pages/friends";
 import User from "./pages/user";
 import Settings from "./pages/settings";
+import Testing from "./pages/testInfinteScroll";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/friends" element={<FriendsPage />} />
           <Route path="/settings/:user_id" element={<Settings />}/>
+          <Route path="/test" element={<Testing />} />
         </Routes>
       </main>
     </div>

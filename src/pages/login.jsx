@@ -98,7 +98,7 @@ function Login() {
             {loading ? "Login In...." : "Login"}
           </button>
           <div className={styles.error_displayer}>
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {error && <p className={styles.errorMessage}>{error}</p>}
           </div>
           <div className={styles.links}>
             Dont have account, SignUp <Link to="/signup">here</Link>

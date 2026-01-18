@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../components/navbar";
 import FeedCard from "../components/feed-card";
-import styles from "../css/login.module.css";
+import styles from "../css/profile.module.css";
 import { format, parseISO } from "date-fns";
 
 import { useNavigate } from "react-router-dom";
@@ -10,10 +10,13 @@ import { useNavigate } from "react-router-dom";
 function Profile() {
   const BASE_URL = "http://192.168.8.114:8000";
 
+
   const [profileData, setProfileData] = useState([]);
   const [loadingProfileData, setLoadingProfileData] = useState(false);
   const [currentUser, setCurrentUser] = useState([]);
   const [userPost, setUserPost] = useState([]);
+
+  const [searchQuery, setSearchQiery] = useState("");
 
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -26,6 +29,8 @@ function Profile() {
   const [mediaFiles, setMediaFiles] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState({});
 
+  const ShowCreatePost = () => setShowCreate(true);
+  const HideCreatePost = () => setShowCreate(false);
   const [loadingUserPost, setLoadingUserPost] = useState(false);
 
   const navigate = useNavigate();
@@ -56,10 +61,15 @@ function Profile() {
         //alert("Post created!");
         setPostDescription("");
         setMediaFiles([]);
-        setShowCreate(false);
-        fetchProfileelatedData();
+        //fetchProfileelatedData();
+        fetchUserPosts()
+        HideCreatePost();
       } else {
         alert("Failed to create post");
+        setPostDescription("");
+        setMediaFiles([]);
+        fetchProfileelatedData();
+        HideCreatePost();
       }
     } catch (err) {
       console.error(err);
@@ -120,7 +130,7 @@ function Profile() {
       });
 
       const data = await user_profile.json();
-     // console.log(data);
+      // console.log(data);
       setProfileData(data);
     } catch (eeror) {
       console.log("Fail to Load Profile");
@@ -178,11 +188,12 @@ function Profile() {
       return (
         <div>
           <h1>No more Post From You.</h1>
-          <h1>Born on,{" "} 
-            {
-              profileData.date_of_birth ? (formatDate(profileData.date_of_birth)) : "Loading ......"
-            }
-             </h1>
+          <h1>
+            Born on,{" "}
+            {profileData.date_of_birth
+              ? formatDate(profileData.date_of_birth)
+              : "Loading ......"}
+          </h1>
         </div>
       );
     } else {
@@ -200,65 +211,46 @@ function Profile() {
 
   const FeedLoadingAninmate = () => {
     return (
-      <div className="loaders">
-        <div className="post-main-card">
-          <div className="post-card-container">
-            <div className="post-card-profile">
-              <div className="post-profile-image"></div>
-              <div className="post-info">
-                <div className="post-prfole-name-time-ago"></div>
+      <div className={styles.loaders}>
+        <div className={styles.postmaincard}>
+          <div className={styles.postcardcontainer}>
+            <div className={styles.postcardprofile}>
+              <div className={styles.postprofileimage}></div>
+              <div className={styles.postinfo}>
+                <div className={styles.postprfolenametimeago}></div>
               </div>
-              <div className="post-firend-stats"></div>
+              <div className={styles.postfirendstats}></div>
             </div>
-            <div className="post-card-description"></div>
-            <div className="post-card-media"></div>
+            <div className={styles.postcarddescription}></div>
+            <div className={styles.postcardmedia}></div>
           </div>
         </div>
       </div>
     );
   };
 
-  return (
-    <div className="profile-page">
-      <div className="navbar">
-        <NavBar />
-      </div>
-
-      <div style={{ paddingTop: "70px" }}>
-        <button
-          onClick={() => setShowCreate(!showCreate)}
-          style={{
-            padding: "10px 20px",
-            background: "#1877f2",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            marginBottom: "20px",
-          }}
-        >
-          {showCreate ? "Hide Form" : "Create Post"}
-        </button>
-
-        {/* Create Post Form */}
-        {showCreate && (
-          <form
-            onSubmit={handleSubmit}
-            style={{
-              padding: "15px",
-              border: "1px solid #ccc",
-              borderRadius: "10px",
-              background: "#f9f9f9",
-              marginBottom: "20px",
-            }}
-          >
+  const ShowPostCreation = () => {
+    return (
+      <div className={styles.postCreationShower}>
+        <div className={styles.PostCreationArea}>
+          {creatingpost && (
+            <div className={styles.loadingoverlay}>
+              <div className={styles.spinner}></div>
+              <p>
+                <strong>Creating your Post.....</strong>
+              </p>
+            </div>
+          )}
+          <button className={styles.closePostFormButton} onClick={() => HideCreatePost()}>Close❌</button>
+          <form className={styles.createPostForm} onSubmit={handleSubmit}>
             <textarea
+              className={styles.createPostTextArea}
               placeholder="What's on your mind?"
               value={postDescription}
               onChange={(e) => setPostDescription(e.target.value)}
-              style={{ width: "100%", height: "80px", padding: "10px" }}
             />
             <input
+              className={styles.createPostInput}
               type="file"
               multiple
               onChange={(e) =>
@@ -270,56 +262,32 @@ function Profile() {
               style={{ marginTop: "10px" }}
             />
             {mediaFiles.length > 0 && (
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "10px",
-                  marginTop: "10px",
-                }}
-              >
+              <div className={styles.createPostMediaPreview}>
                 {mediaFiles.map((file, idx) => {
                   const isImage = file.type.startsWith("image");
                   const url = URL.createObjectURL(file);
                   return isImage ? (
                     <img
+                      className={styles.CreatePostPreviewImage}
                       key={idx}
                       src={url}
                       alt={file.name}
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        objectFit: "cover",
-                        borderRadius: "5px",
-                      }}
                     />
                   ) : (
                     <video
+                      className={styles.createPostPreviewVideo}
                       key={idx}
                       controls
                       src={url}
-                      style={{
-                        width: "150px",
-                        height: "100px",
-                        borderRadius: "5px",
-                      }}
                     />
                   );
                 })}
               </div>
             )}
             <button
+              className={styles.createPostSubmitButton}
               type="submit"
               disabled={creatingpost}
-              style={{
-                marginTop: "10px",
-                padding: "10px 20px",
-                background: "#42b72a",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
             >
               {creatingpost ? "Creating Post....." : "Post"}
             </button>
@@ -327,13 +295,32 @@ function Profile() {
               <p style={{ color: "red" }}>{formSubmitionError}</p>
             )}
           </form>
-        )}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className={styles.profilePage}>
+      <div className={styles.navbar}>
+        <NavBar />
+      </div>
+      <div className={styles.createPost}>
+        <button
+          className={styles.createPostBtn}
+          onClick={() => ShowCreatePost()}
+        >
+          Create Post
+        </button>
+
+        {/* Create Post Form */}
+        {showCreate && ShowPostCreation()}
       </div>
       {loadingProfileData ? (
         "Laoding User Profile Please Wait......"
       ) : (
-        <div className="content">
-          <div className="profile-info">
+        <div className={styles.content}>
+          <div className={styles.profileInfo}>
             <h1>Profile Details</h1>
             <h1>
               Welecome On Board {currentUser.firstname}, {currentUser.lastname}
@@ -362,8 +349,16 @@ function Profile() {
       {loadingUserPost ? (
         FeedLoadingAninmate()
       ) : (
-        <div className="my-timeline">
+        <div className={styles.myTimeline}>
           <h1>What i Shared</h1>
+          <div className={styles.searchBar}>
+            <input
+              type="text"
+              placeholder="Search Post"
+              value={searchQuery}
+              onChange={(e) => setSearchQiery(e.target.value)}
+            />
+          </div>
 
           {userPost.map((post) => (
             <FeedCard key={post.id} feed={post} />

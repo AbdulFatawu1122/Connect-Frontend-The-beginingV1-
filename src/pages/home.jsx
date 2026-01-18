@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useSubmit } from "react-router-dom";
-import AddFriendCard from "../components/add_friend_card";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-import TimeAgo from "react-timeago"; // to caluculate a time ago post
 
-import { Link } from "react-router-dom";
+import styles from "../css/home.module.css";
 
-import styles from "../css/login.module.css";
-
-import { use } from "react";
-import FeedCard from "../components/feed-card";
+import FeedCardForProfile from "../components/feed-card-for-profile";
 import NavBar from "../components/navbar";
 
 const BASE_URL = "http://192.168.8.114:8000";
@@ -22,11 +18,12 @@ function Home() {
   const [profileData, setProfileData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [postDescription, setPostDescription] = useState("");
-  const [postFiles, setPostFiles] = useState([]);
+  const [FeedData, setFeeddata] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [LoadingInitial, setLoadingInitial] = useState(true);
 
-  const [feed_data, setFeed] = useState([]);
-  const [loadingFeed, setLoadingFeed] = useState(false);
+  //const [loadingFeed, setLoadingFeed] = useState(false);
 
   //get the current user to verify their token
   const get_current_user = async () => {
@@ -90,39 +87,56 @@ function Home() {
     }
   };
 
-  const fetchFeed = async () => {
-    
+  const fetchFeed = useCallback(async (pageNum) => {
     try {
       const token = sessionStorage.getItem("token");
-      setLoadingFeed(true);
-      const res = await fetch(`${BASE_URL}/posts/feed`, {
-        method: "Get",
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      setFeed(Array.isArray(data) ? data : []);
-      setLoadingFeed(false);
-      // console.log(data);
-    } catch (err) {
-      console.error("Error fetching feed:", err);
+      const res = await fetch(
+        `${BASE_URL}/posts/test-v1-feed?limit=5&page=${pageNum}`,
+        {
+          method: "Get",
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await res.json();
+      console.log(result);
+
+      //Update data
+      //If page 1, replace data, if page 2+, append data
+      setFeeddata((prev) =>
+        pageNum === 1 ? result.data : [...prev, ...result.data]
+      );
+
+      // Update hasMore
+      setHasMore(result.hasMore);
+      setLoadingInitial(false);
+    } catch (error) {
+      console.error("Fetch Error", error);
+      setLoadingInitial(false);
     }
-    
-  };
+  }, []);
 
   useEffect(() => {
     verify_token();
   }, [navigate]);
 
   useEffect(() => {
-    fetchFeed();
-  }, []);
+    fetchFeed(1);
+  }, [fetchFeed]);
+
+  // Loading more
+  const loadNextPage = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchFeed(nextPage);
+  };
 
   const feedLenght = () => {
-    if (feed_data.length >= 1) {
-      return <h1>No more Feed.</h1>;
+    if (FeedData.length >= 1) {
+      return <h1>No more Feed</h1>;
     } else {
       return <h1>No feed available</h1>;
     }
@@ -131,52 +145,24 @@ function Home() {
   const FeedLoadingAninmate = () => {
     return (
       <div className="loaders">
-        <div className="post-main-card">
-          <div className="post-card-container">
-            <div className="post-card-profile">
-              <div className="post-profile-image"></div>
-              <div className="post-info">
-                <div className="post-prfole-name-time-ago"></div>
+        <div className={styles.postmaincard}>
+          <div className={styles.postcardcontainer}>
+            <div className={styles.postcardprofile}>
+              <div className={styles.postprofileimage}></div>
+              <div className={styles.postinfo}>
+                <div className={styles.postprfolenametimeago}></div>
               </div>
-              <div className="post-firend-stats"></div>
+              <div className={styles.postfirendstats}></div>
             </div>
-            <div className="post-card-description"></div>
-            <div className="post-card-media"></div>
-          </div>
-        </div>
-
-        <div className="post-main-card">
-          <div className="post-card-container">
-            <div className="post-card-profile">
-              <div className="post-profile-image"></div>
-              <div className="post-info">
-                <div className="post-prfole-name-time-ago"></div>
-              </div>
-              <div className="post-firend-stats"></div>
-            </div>
-            <div className="post-card-description"></div>
-            <div className="post-card-media"></div>
-          </div>
-        </div>
-
-        <div className="post-main-card">
-          <div className="post-card-container">
-            <div className="post-card-profile">
-              <div className="post-profile-image"></div>
-              <div className="post-info">
-                <div className="post-prfole-name-time-ago"></div>
-              </div>
-              <div className="post-firend-stats"></div>
-            </div>
-            <div className="post-card-description"></div>
-            <div className="post-card-media"></div>
+            <div className={styles.postcarddescription}></div>
+            <div className={styles.postcardmedia}></div>
           </div>
         </div>
       </div>
     );
   };
 
-  const feedTotal = feed_data.length;
+  const feedTotal = FeedData.length;
   return (
     <div className="main-home">
       <div>
@@ -191,15 +177,23 @@ function Home() {
       </div>
 
       <div>
-        {loadingFeed ? (
+        {LoadingInitial ? (
           FeedLoadingAninmate()
         ) : (
-          <div>
-            {feed_data.map((post) => (
-              <FeedCard key={post.id} feed={post} />
-            ))}
-            <div style={{ textAlign: "center" }}>{feedLenght()}</div>
-          </div>
+          <InfiniteScroll
+            dataLength={FeedData.length}
+            next={loadNextPage}
+            hasMore={hasMore}
+            loader={FeedLoadingAninmate()}
+            endMessage={<h1 style={{textAlign:"center"}}>No more Feed.</h1>}
+            scrollThreshold={0.9} //load more post when user is 200px from the buttom
+          >
+            <div>
+              {FeedData.map((post) => {
+                return <FeedCardForProfile key={post.id} feed={post} />;
+              })}
+            </div>
+          </InfiniteScroll>
         )}
       </div>
     </div>
