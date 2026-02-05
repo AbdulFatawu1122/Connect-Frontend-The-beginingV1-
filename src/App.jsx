@@ -9,7 +9,8 @@ import FriendsPage from "./pages/friends";
 import User from "./pages/user";
 import Settings from "./pages/settings";
 import Testing from "./pages/testInfinteScroll";
-
+import Chat from "./pages/websockets";
+import Chats from "./pages/chats";
 function App() {
   return (
     <div>
@@ -22,7 +23,8 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/friends" element={<FriendsPage />} />
           <Route path="/settings/:user_id" element={<Settings />}/>
-          <Route path="/test" element={<Testing />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/chats/:reciever_id" element={<Chats />} />
         </Routes>
       </main>
     </div>

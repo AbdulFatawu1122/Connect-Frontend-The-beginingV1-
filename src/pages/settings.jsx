@@ -4,10 +4,9 @@ import { useNavigate } from "react-router-dom";
 import NavBar from "../components/navbar";
 import { useParams } from "react-router-dom";
 import styles from "../css/settings.module.css";
-import { format, parseISO } from "date-fns";
+import { addYears, format, parseISO } from "date-fns";
 
-const BASE_URL = "http://192.168.8.114:8000";
-
+import { BASE_URL } from "../apis/apis";
 
 function Settings() {
   const [currentUser, setCurrentUser] = useState([]);
@@ -21,6 +20,11 @@ function Settings() {
   const [bio, setBio] = useState("");
   const [date_of_birth, setDataOfBirth] = useState("");
   const [town, setTown] = useState("");
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [age, setAge] = useState("");
+  const [profileImage, setProfileImage] = useState([]);
+
   const handleenbaleform = () => setisformDisable(false);
   const handledisenbaleform = () => setisformDisable(true);
   const [foremerror, setformerror] = useState("");
@@ -36,7 +40,15 @@ function Settings() {
   const HideUpdateYserInfoPopup = () => setShowUpdate(false);
 
   const validateForm = () => {
-    if (!middlename || !bio || !town || !date_of_birth) {
+    if (
+      !middlename ||
+      !bio ||
+      !town ||
+      !date_of_birth ||
+      !firstname ||
+      !lastname ||
+      !age
+    ) {
       setformerror("All fields Need to fill");
       return false;
     }
@@ -49,10 +61,17 @@ function Settings() {
     if (!validateForm()) return;
 
     const formDetails = {
-      middlename,
-      bio,
-      town,
-      date_of_birth,
+      profile_data: {
+        middlename,
+        bio,
+        town,
+        date_of_birth,
+      },
+      user_info: {
+        firstname,
+        lastname,
+        age,
+      },
     };
 
     try {
@@ -78,6 +97,35 @@ function Settings() {
       setSubmittingForm(false);
       console.log("Error whilts updating Info", error);
       setformerror("Failed to Update your Info, Try Again");
+    }
+  };
+
+  const handleChangeProfileImage = async (e) => {
+    e.preventDefault();
+    if (profileImage) {
+      const formData = new FormData();
+      formData.append("file", profileImage);
+
+      try {
+        const token = sessionStorage.getItem("token");
+        const res = await fetch(`${BASE_URL}/posts/profileImage`, {
+          method: "POST",
+          body: formData,
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.ok) {
+          alert("You have changed your profile picture");
+          setProfileImage([]);
+          navigate("/profile");
+        }
+      } catch (error) {
+        console.error("Something went wrong and failed to change profile");
+      }
+    } else {
+      alert("You have to select or upload an Image")
     }
   };
 
@@ -115,7 +163,7 @@ function Settings() {
             accept: "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       const data = await current_user.json();
@@ -135,7 +183,7 @@ function Settings() {
           headers: {
             accept: "application/json",
           },
-        }
+        },
       );
 
       const data = await user_profile.json();
@@ -151,8 +199,8 @@ function Settings() {
   }, [navigate]);
 
   const fetchProfileData = async () => {
-    fetch_profile(user_id);
-    get_current_user(user_id);
+    await fetch_profile(user_id);
+    await get_current_user(user_id);
   };
 
   useEffect(() => {
@@ -175,6 +223,33 @@ function Settings() {
             </div>
             <form onSubmit={handleUpdateInfo}>
               <fieldset>
+                <div className={styles.firstname}>
+                  <label>First Name</label>
+                  <input
+                    placeholder={currentUser.user.firstname}
+                    value={firstname}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    type="text"
+                  />
+                </div>
+                <div className={styles.lastname}>
+                  <label>Last Name</label>
+                  <input
+                    placeholder={currentUser.user.lastname}
+                    value={lastname}
+                    onChange={(e) => setLastName(e.target.value)}
+                    type="text"
+                  />
+                </div>
+                <div className={styles.age}>
+                  <label>Age</label>
+                  <input
+                    placeholder={currentUser.user.age}
+                    value={age}
+                    onChange={(e) => setAge(e.target.value)}
+                    type="number"
+                  />
+                </div>
                 <div className={styles.middlname}>
                   <label>Middle Name</label>
                   <input
@@ -237,11 +312,30 @@ function Settings() {
         </div>
         <div className={styles.lineabovesettingstext}></div>
         <h1>Manage your Account {currentUser.firstname} </h1>
+        <div className={styles.chnageProfileImage} style={{alignItems:"center", textAlign:'center'}}>
+          <fieldset>
+            <h2>click to choose your new Profile Picture and hit Change</h2>
+            <form onSubmit={handleChangeProfileImage}>
+            <input
+              style={{ width: "400px" }}
+              accept="image/*"
+              onChange={(e) => setProfileImage(e.target.files[0])}
+              type="file"
+            />
+            <button
+              style={{ width: "130px", backgroundColor: "green", height:"50px" }}
+              type="submit"
+            >
+              Change Your Profile
+            </button>
+          </form>
+          </fieldset>
+        </div>
         <div className={styles.settingsContent}>
           <div className={styles.profielInfo}>
             <h3>Profile Information</h3>
             <h4>
-              First Name: <strong>{currentUser.firstname}</strong>
+              First Name: <strong>{currentUser.user?.firstname}</strong>
             </h4>
             <h4>
               Middlename{" "}
@@ -250,10 +344,10 @@ function Settings() {
               </strong>
             </h4>
             <h4>
-              Last Name: <strong>{currentUser.lastname}</strong>{" "}
+              Last Name: <strong>{currentUser.user?.lastname}</strong>{" "}
             </h4>
             <h4>
-              Age: <strong>{currentUser.age}</strong>
+              Age: <strong>{currentUser.user?.age}</strong>
             </h4>
             <h4>
               Date of Birth:{" "}
@@ -264,12 +358,12 @@ function Settings() {
               </strong>
             </h4>
             <h4>
-              Email or Phone: <strong>{currentUser.email}</strong>{" "}
+              Email or Phone: <strong>{currentUser.user?.email}</strong>{" "}
             </h4>
           </div>
 
           <div className={styles.userDetails}>
-            <h3>{currentUser.firstname}, Details</h3>
+            <h3>{currentUser.user?.firstname}Details</h3>
             <h4>
               Bio: <strong>{profileData.bio}</strong>
             </h4>

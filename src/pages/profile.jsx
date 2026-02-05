@@ -1,33 +1,37 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../components/navbar";
 import FeedCard from "../components/feed-card";
 import styles from "../css/profile.module.css";
 import { format, parseISO } from "date-fns";
+import InfiniteScroll from "react-infinite-scroll-component";
 
+import { BASE_URL } from "../apis/apis";
 import { useNavigate } from "react-router-dom";
 
 function Profile() {
-  const BASE_URL = "http://192.168.8.114:8000";
-
-
   const [profileData, setProfileData] = useState([]);
   const [loadingProfileData, setLoadingProfileData] = useState(false);
   const [currentUser, setCurrentUser] = useState([]);
   const [userPost, setUserPost] = useState([]);
 
+  const [FeedData, setFeeddata] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [LoadingInitial, setLoadingInitial] = useState(true);
+
   const [searchQuery, setSearchQiery] = useState("");
 
-  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [creatingpost, setCreatingPost] = useState(false);
   const [formSubmitionError, setFormSubmitionError] = useState("");
-  const [hasMore, setHasMore] = useState(true); //if a page have more posts
   const [posts, setPosts] = useState([]);
   const [showCreate, setShowCreate] = useState(false);
   const [postDescription, setPostDescription] = useState("");
   const [mediaFiles, setMediaFiles] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState({});
+
+  const [friends, setFriends] = useState([]);
 
   const ShowCreatePost = () => setShowCreate(true);
   const HideCreatePost = () => setShowCreate(false);
@@ -62,7 +66,7 @@ function Profile() {
         setPostDescription("");
         setMediaFiles([]);
         //fetchProfileelatedData();
-        fetchUserPosts()
+        fetchFeed(1);
         HideCreatePost();
       } else {
         alert("Failed to create post");
@@ -74,6 +78,25 @@ function Profile() {
     } catch (err) {
       console.error(err);
       alert("Failed to create post");
+    }
+  };
+
+  const fetchFriends = async () => {
+    const token = sessionStorage.getItem("token");
+    try {
+      const friend_profile = await fetch(`${BASE_URL}/user/my-friends`, {
+        method: "Get",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await friend_profile.json();
+      // console.log(data);
+      setFriends(data);
+    } catch (eeror) {
+      console.log("Fail to load friends");
     }
   };
 
@@ -137,32 +160,55 @@ function Profile() {
     }
   };
 
-  const fetchUserPosts = async () => {
+  const fetchFeed = useCallback(async (pageNum) => {
     try {
       const token = sessionStorage.getItem("token");
-      setLoadingUserPost(true);
-      const res = await fetch(`${BASE_URL}/posts/`, {
-        method: "Get",
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${token}`,
+      const res = await fetch(
+        `${BASE_URL}/posts/profilePost?page=${pageNum}&limit=5`,
+        {
+          method: "Get",
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
-      const data = await res.json();
-      setUserPost(Array.isArray(data) ? data : []);
-      setLoadingUserPost(false);
-      //console.log(data)
-    } catch (err) {
-      console.error("Error fetching posts:", err);
+      );
+
+      const result = await res.json();
+      console.log(result);
+
+      //Update data
+      //If page 1, replace data, if page 2+, append data
+      setFeeddata((prev) =>
+        pageNum === 1 ? result.data : [...prev, ...result.data],
+      );
+
+      // Update hasMore
+      setHasMore(result.hasMore);
+      setLoadingInitial(false);
+    } catch (error) {
+      console.error("Fetch Error", error);
+      setLoadingInitial(false);
     }
-  };
+  }, []);
 
   const fetchProfileelatedData = async () => {
     setLoadingProfileData(true);
-    await fetchUserPosts();
     await get_current_user();
     await fetch_profile();
+    await fetchFriends();
     setLoadingProfileData(false);
+  };
+
+  useEffect(() => {
+    fetchFeed(1);
+  }, [fetchFeed]);
+
+  // Loading more
+  const loadNextPage = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchFeed(nextPage);
   };
 
   useEffect(() => {
@@ -184,10 +230,10 @@ function Profile() {
   };
 
   const feedLenght = () => {
-    if (userPost.length >= 1) {
+    if (FeedData.length >= 1) {
       return (
         <div>
-          <h1>No more Post From You.</h1>
+          <h3>No more Post From You.</h3>
           <h1>
             Born on,{" "}
             {profileData.date_of_birth
@@ -199,7 +245,7 @@ function Profile() {
     } else {
       return (
         <div>
-          <h2>You have not posted anything on your spaces profile</h2>
+          <h4>You have not posted anything on your spaces profile</h4>
           <p>
             Click on the <strong>Create Post</strong> Button to start sharing on
             your new online environment{" "}
@@ -241,17 +287,23 @@ function Profile() {
               </p>
             </div>
           )}
-          <button className={styles.closePostFormButton} onClick={() => HideCreatePost()}>Close❌</button>
+          <button
+            className={styles.closePostFormButton}
+            onClick={() => HideCreatePost()}
+          >
+            Close❌
+          </button>
           <form className={styles.createPostForm} onSubmit={handleSubmit}>
             <textarea
               className={styles.createPostTextArea}
-              placeholder="What's on your mind?"
+              placeholder="What are you sharing today?"
               value={postDescription}
               onChange={(e) => setPostDescription(e.target.value)}
             />
             <input
               className={styles.createPostInput}
               type="file"
+              accept="video/*,image/*"
               multiple
               onChange={(e) =>
                 setMediaFiles((prev) => [
@@ -300,6 +352,8 @@ function Profile() {
     );
   };
 
+  const totla_firends = friends.length;
+
   return (
     <div className={styles.profilePage}>
       <div className={styles.navbar}>
@@ -323,7 +377,7 @@ function Profile() {
           <div className={styles.profileInfo}>
             <h1>Profile Details</h1>
             <h1>
-              Welecome On Board {currentUser.firstname}, {currentUser.lastname}
+              Welecome On Board {currentUser.user?.firstname}, {currentUser.lastname}
             </h1>
             <h3>Email: {currentUser.email} </h3>
             <h4>Age: {currentUser.age} years old </h4>
@@ -340,31 +394,44 @@ function Profile() {
         </div>
       )}
 
+      <div className={styles.my_friends}>
+        <h1>My Friends</h1>
+        <h3>You have {totla_firends} Friends</h3>
+        <h3>Click on firend to chat with</h3>
+        {friends.map((friend) => (
+          <div key={friend.id} className={styles.my_firends_list}>
+            <Link style={{ textDecoration: "none" }} to={`/chats/${friend.id}`}>
+              <div className={styles.info}>
+                {friend.firstname} {friend.lastname}
+              </div>
+            </Link>
+          </div>
+        ))}
+      </div>
+
       <div>
         <h1>
-          <Link to={`/settings/${currentUser.id}`}>Settings</Link>
+          <Link to={`/settings/${currentUser.user?.id}`}>Settings</Link>
         </h1>
       </div>
 
-      {loadingUserPost ? (
+      {LoadingInitial ? (
         FeedLoadingAninmate()
       ) : (
-        <div className={styles.myTimeline}>
-          <h1>What i Shared</h1>
-          <div className={styles.searchBar}>
-            <input
-              type="text"
-              placeholder="Search Post"
-              value={searchQuery}
-              onChange={(e) => setSearchQiery(e.target.value)}
-            />
+        <InfiniteScroll
+          dataLength={FeedData.length}
+          next={loadNextPage}
+          hasMore={hasMore}
+          loader={FeedLoadingAninmate()}
+          endMessage={<h1 style={{ textAlign: "center" }}>{feedLenght()}</h1>}
+          scrollThreshold={0.9} //load more post when user is 200px from the buttom
+        >
+          <div>
+            {FeedData.map((post) => {
+              return <FeedCard key={post.id} feed={post} />;
+            })}
           </div>
-
-          {userPost.map((post) => (
-            <FeedCard key={post.id} feed={post} />
-          ))}
-          <div style={{ textAlign: "center" }}>{feedLenght()}</div>
-        </div>
+        </InfiniteScroll>
       )}
     </div>
   );

@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 
 import styles from  "../css/signup.module.css";
 
-const BASE_URL = "http://192.168.8.114:8000";
-
+import { BASE_URL } from "../apis/apis";
 
 function SignUp() {
   const [email, setEmail] = useState("");
@@ -13,7 +12,7 @@ function SignUp() {
   const [lastname, setLastName] = useState("");
   const [age, setAge] = useState("");
   const [password, setPassword] = useState("");
-  const [date_of_birth, setDateofBirth] = useState(new Date);
+  const [date_of_birth, setDateofBirth] = useState("");
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);

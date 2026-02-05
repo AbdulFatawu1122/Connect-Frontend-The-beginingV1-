@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 import styles from "../css/login.module.css";
 import Home from "./home";
 
-const BASE_URL = "http://192.168.8.114:8000";
-
+import { BASE_URL } from "../apis/apis";
 
 
 function Login() {

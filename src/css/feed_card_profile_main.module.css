@@ -3,10 +3,14 @@
   max-width: 450px;
   max-height: 100%;
   margin: 10px auto;
-  background-color: #ffffff; /* White background for the card */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  border: 1px solid #ddd; /* Light border */
-  overflow: hidden; /* Ensures no content spills out of the rounded corners */
+  background-color: #ffffff;
+  /* White background for the card */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  /* Subtle shadow for depth */
+  border: 1px solid #ddd;
+  /* Light border */
+  overflow: hidden;
+  /* Ensures no content spills out of the rounded corners */
 }
 
 .card_container {
@@ -17,24 +21,37 @@
 
 .profile {
   display: flex;
-  align-items: center; /* Vertically align items */
+  align-items: center;
+  /* Vertically align items */
   margin-bottom: 0;
 }
 
 .profile_image {
-  width: 40px; /* Standard size for profile picture placeholder */
+  width: 40px;
+  /* Standard size for profile picture placeholder */
   height: 40px;
-  border-radius: 50%; /* Makes it a circle */
-  background-color: #ccc; /* Placeholder color */
+  border-radius: 50%;
+
+  /* Makes it a circle */
+  background-color: #ccc;
+  /* Placeholder color */
   margin-right: 10px;
   border: 1px solid #eee;
-  flex-shrink: 0; /* Prevents the image from shrinking */
+  flex-shrink: 0;
+  /* Prevents the image from shrinking */
+}
+.profile_image img {
+  object-fit:cover;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .info {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Allows the info section to take up available space */
+  flex-grow: 1;
+  /* Allows the info section to take up available space */
   gap: 0%;
 }
 
@@ -48,6 +65,7 @@
   margin-top: 0%;
   margin-bottom: 0%;
 }
+
 .time_ago {
   color: #7b6c6c;
   margin-top: 0%;
@@ -82,6 +100,7 @@
   white-space: pre-wrap;
   padding-left: 5px;
 }
+
 .post_description p {
   margin-top: 0%;
   margin-bottom: 0%;
@@ -100,19 +119,22 @@
        to the full width while maintaining its aspect ratio, preventing
        cropping or stretching. object-fit: cover is removed. */
   width: 100%;
-  max-height: 700px;
-  object-fit: fill;
+  max-height: 370px;
+  object-fit: cover;
   object-position: center;
   height: auto;
   display: block;
-  max-width: 100%; /* Safety measure */
+  max-width: 100%;
+  /* Safety measure */
 }
+
 .post_media img {
   width: 100%;
-  max-height: 100%;
-  object-fit: fill;
+  height: 370px;
+  object-fit: cover;
   display: block;
-  max-width: 100%; /* Safety measure */
+  max-width: 100%;
+  /* Safety measure */
 }
 
 /* Loading Spinner for Feed */
@@ -121,6 +143,7 @@
   0% {
     background-position: -468px 0;
   }
+
   100% {
     background-position: 468px 0;
   }
@@ -129,13 +152,17 @@
 /* --- 2. Main Card Container --- */
 .post_main_card {
   background-color: #ffffff;
-  border-radius: 8px; /* Facebook's standard corner radius */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow depth */
+  border-radius: 8px;
+  /* Facebook's standard corner radius */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  /* Subtle shadow depth */
   width: 100%;
-  max-width: 450px; /* Standard feed width */
+  max-width: 450px;
+  /* Standard feed width */
   margin: 0 auto 20px auto;
   overflow: hidden;
-  padding: 12px 16px; /* Facebook spacing */
+  padding: 12px 16px;
+  /* Facebook spacing */
   box-sizing: border-box;
 }
 
@@ -156,7 +183,8 @@
 .post_profile_image {
   width: 40px;
   height: 40px;
-  border-radius: 50%; /* Perfect circle */
+  border-radius: 50%;
+  /* Perfect circle */
   flex-shrink: 0;
 }
 
@@ -175,7 +203,8 @@
    Let's make it look like the Name Line. */
 .post_prfole_name_time_ago {
   height: 10px;
-  width: 120px; /* Short width for name */
+  width: 120px;
+  /* Short width for name */
   border-radius: 10px;
   margin-bottom: 6px;
 }
@@ -184,20 +213,20 @@
 .post_prfole_name_time_ago::after {
   content: "";
   display: block;
-  width: 80px; /* Shorter width for timestamp */
+  width: 80px;
+  /* Shorter width for timestamp */
   height: 8px;
   border-radius: 10px;
-  margin-top: 14px; /* Push it down */
+  margin-top: 14px;
+  /* Push it down */
 
   /* Apply the same shimmer background manually or inherit */
   background: #f6f7f8;
-  background-image: linear-gradient(
-    to right,
-    #f6f7f8 0%,
-    #edeef1 20%,
-    #f6f7f8 40%,
-    #f6f7f8 100%
-  );
+  background-image: linear-gradient(to right,
+      #f6f7f8 0%,
+      #edeef1 20%,
+      #f6f7f8 40%,
+      #f6f7f8 100%);
   background-repeat: no-repeat;
   background-size: 800px 100%;
   animation: placeholderShimmer 1s linear infinite forwards;
@@ -213,35 +242,27 @@
 /* --- 4. Description (Text Lines) --- */
 .post_card_description {
   height: 10px;
-  width: 90%; /* Doesn't go full width usually */
+  width: 90%;
+  /* Doesn't go full width usually */
   margin-top: 8px;
   margin-bottom: 8px;
   border-radius: 4px;
 }
 
-/* --- 5. Media (The Big Image/Video) --- */
-.post_card_media {
-  width: 100%;
-  height: 300px; /* Standard placeholder height */
-  border-radius: 8px; /* Slight curve on media */
-  margin-top: 4px;
-}
+
 
 /* --- 6. The Shared Shimmer Class Logic --- */
 /* This applies the effect to all the 'grey' elements defined above */
 .post_profile_image,
 .post_prfole_name_time_ago,
 .post_firend_stats,
-.post_card_description,
-.post_card_media {
+.post_card_description {
   background: #f6f7f8;
-  background-image: linear-gradient(
-    to right,
-    #f6f7f8 0%,
-    #edeef1 20%,
-    #f6f7f8 40%,
-    #f6f7f8 100%
-  );
+  background-image: linear-gradient(to right,
+      #f6f7f8 0%,
+      #edeef1 20%,
+      #f6f7f8 40%,
+      #f6f7f8 100%);
   background-repeat: no-repeat;
   background-size: 800px 100%;
   animation-duration: 1s;
@@ -257,6 +278,7 @@
   gap: 2px;
   text-align: center;
 }
+
 .lefttoggle button {
   color: rgb(30, 19, 19);
   width: 9px;
@@ -266,17 +288,142 @@
   background-color: red;
 }
 
+.TypeCommentsInput {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.TypeCommentsInput button {
+  border-radius: 0;
+  font-size: 19px;
+  background-color: #327a31;
+  color: rgb(235, 235, 235);
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.TypeCommentsInput input {
+  border-radius: 0;
+}
+
+.popupPostMedia {
+  position: relative;
+  /* Needed for close button positioning */
+
+  /* Responsive Size logic */
+
+
+  border-radius: 10px;
+  /* Very round, modern corners */
+  overflow-y: auto;
+
+  /* The "Premium" Shadow */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* The Spring Animation */
+  animation: slideUpSpring 1.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+
+.MediaBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  /* Darker backdrop */
+
+  /* Modern Blur Effect (Frosted Glass) */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  /* Fix for iPhones */
+
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 1s ease-out;
+
+}
+
+.MediaBox img {
+  width: 100%;
+  height: 100%;
+  max-width: 600px;
+  max-height:  fit-content;
+}
+.MediaBox video {
+  width: 100%;
+  max-height: 700px;
+}
+
+.MediaNormal button {
+  height: 300px;
+  background-color: #03bd00;
+  display: none;
+}
+
+
+.CommentsDisplaBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  /* Darker backdrop */
+
+  /* Modern Blur Effect (Frosted Glass) */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  /* Fix for iPhones */
+
+  z-index: 1000;
+
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 1.0s ease-out;
+}
+
+
+.CommentsContent {
+  position: relative;
+  /* Needed for close button positioning */
+  background: rgb(229, 228, 253);
+
+  /* Responsive Size logic */
+  width: 70%;
+  height: 75vh;
+
+  padding: 40px 30px 30px 30px;
+  overflow-y: auto;
+
+  /* The "Premium" Shadow */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* The Spring Animation */
+  animation: slideUpSpring 1.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+
 .deleteDialogBox {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Darker backdrop */
+  background-color: rgba(0, 0, 0, 0.7);
+  /* Darker backdrop */
 
   /* Modern Blur Effect (Frosted Glass) */
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px); /* Fix for iPhones */
+  -webkit-backdrop-filter: blur(8px);
+  /* Fix for iPhones */
 
   z-index: 1000;
   display: flex;
@@ -285,21 +432,24 @@
   animation: fadeIn 1s ease-out;
 }
 
+
 .content {
-  position: relative; /* Needed for close button positioning */
+  position: relative;
+  /* Needed for close button positioning */
 
   /* Responsive Size logic */
   width: 85%;
   max-width: 420px;
   max-height: 85vh;
-  
-  padding: 40px 30px 30px 30px; 
-  border-radius: 24px; /* Very round, modern corners */
+
+  padding: 40px 30px 30px 30px;
+  border-radius: 24px;
+  /* Very round, modern corners */
   overflow-y: auto;
-  
+
   /* The "Premium" Shadow */
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  
+
   /* The Spring Animation */
   animation: slideUpSpring 1.6s cubic-bezier(0.19, 1, 0.22, 1);
 }
@@ -311,12 +461,13 @@
 }
 
 .message p {
-    color: red;
-    text-align: center;
+  color: red;
+  text-align: center;
 }
+
 .message h2 {
-    color: #ffffff;
-    text-align: center;
+  color: #ffffff;
+  text-align: center;
 }
 
 .action_buttons {
@@ -325,6 +476,7 @@
   display: flex;
   gap: 20%;
 }
+
 .cancel_button {
   color: red;
   font-size: larger;
@@ -339,9 +491,46 @@
   background-color: #03bd00;
 }
 
+.buttomStats {
+  display: flex;
+  gap: 50%;
+}
+
+.commentIcon {
+  width: 100%;
+  height: 100%;
+}
+
+.commentIcon button {
+  background-color: #0a9f3e;
+  color: #fefefe;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.likesLove {
+  width: 100%;
+  height: 100%;
+}
+
+.likesLove button {
+  background-color: #0e4aff;
+  font-size: 16px;
+  color: #ece7e7;
+  font-weight: bold;
+  font-family: 'Times New Roman', Times, serif;
+
+}
+
 /* --- Mobile Responsiveness --- */
 
 @media (max-width: 463px) {
+  .MediaBox {
+    display: flex;
+    flex-direction: column;
+  }
+
   /* For Tablets and smaller screens */
   .post_card {
     width: 100%;
@@ -350,17 +539,24 @@
     border-right: none;
     box-shadow: none;
     border-radius: 1px;
-    border-top: 5px solid #f0f2f5; /* Thicker separator for mobile view */
+    border-top: 5px solid #f0f2f5;
+    /* Thicker separator for mobile view */
     border-bottom: none;
   }
 
   .card_container {
-    padding: 11px; /* Slightly less padding on mobile */
+    padding: 11px;
+    /* Slightly less padding on mobile */
+  }
+
+  .CommentsContent {
+    width: 100%;
   }
 
   .post_media {
     /* On mobile, align media container padding */
-    margin: 0 -12px 0; /* Use mobile's padding adjustment */
+    margin: 0 -12px 0;
+    /* Use mobile's padding adjustment */
   }
 
   .profile_image {

@@ -1,0 +1,41 @@
+
+
+.SignleComment {
+    padding-bottom: 1px;
+}
+.CommentCard {
+    background-color: gre;
+}
+.CommeterProfile {
+    display: flex;
+}
+.CommenterProfilePicture {
+    width: 40px;
+    height: 40px;
+    border-radius: 60px;
+    background-color: rgb(186, 184, 184);
+}
+
+.CommenterName h3 {
+    margin: 0;
+    margin-top: 6px;
+    margin-left: 4px;
+    font-size: 14px;
+}
+
+.CommenterComment {
+    padding-left: 19px;
+    display: flex;
+}
+
+.CommentPostedTime {
+    margin-left: 30%;
+}
+.CommentPostedTime p {
+    margin-top: 0;
+}
+
+.CommenterComment p {
+    margin: 0;
+    margin-top: 4px;
+}

@@ -114,9 +114,6 @@ body {
 
 
 /* --- 6. Input Field Groups --- */
-label {
-    display: none;
-}
 
 input {
     width: 100%;

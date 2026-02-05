@@ -8,7 +8,7 @@ import styles from "../css/home.module.css";
 import FeedCardForProfile from "../components/feed-card-for-profile";
 import NavBar from "../components/navbar";
 
-const BASE_URL = "http://192.168.8.114:8000";
+import { BASE_URL } from "../apis/apis";
 
 function Home() {
   const user_token = sessionStorage.getItem("token");
@@ -162,6 +162,8 @@ function Home() {
     );
   };
 
+  
+
   const feedTotal = FeedData.length;
   return (
     <div className="main-home">
@@ -169,7 +171,7 @@ function Home() {
         <NavBar />
       </div>
       <div>
-        <h1 style={{ paddingTop: "70px" }}>Hello, {currentUser.firstname}</h1>
+        <h1 style={{ paddingTop: "70px" }}>Hello, {currentUser.user?.firstname}</h1>
       </div>
 
       <div style={{ textAlign: "center", backgroundColor: "yellow" }}>
@@ -185,7 +187,7 @@ function Home() {
             next={loadNextPage}
             hasMore={hasMore}
             loader={FeedLoadingAninmate()}
-            endMessage={<h1 style={{textAlign:"center"}}>No more Feed.</h1>}
+            endMessage={feedLenght()}
             scrollThreshold={0.9} //load more post when user is 200px from the buttom
           >
             <div>

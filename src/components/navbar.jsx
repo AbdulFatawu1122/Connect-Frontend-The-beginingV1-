@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import styles from "../css/navbar.module.css";
 import { useEffect, useState } from "react";
-const BASE_URL = "http://192.168.8.114:8000";
+
+import { BASE_URL } from "../apis/apis";
 
 function NavBar() {
   return (

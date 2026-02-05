@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import NavBar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/friends.module.css";
-const BASE_URL = "http://192.168.8.114:8000";
+
+import { BASE_URL } from "../apis/apis";
 
 
 import { Link } from "react-router-dom";
