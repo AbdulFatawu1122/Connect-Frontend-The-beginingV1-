@@ -304,7 +304,7 @@ function FeedCard({ feed }) {
               <p className={styles.name}>
                 <Link
                   style={{ textDecoration: "none" }}
-                  to={`/user/${feed.user.id}`}
+                  to={`/user/${feed.user.userInfo.id}`}
                   title={`${feed.user.firstname}, ${feed.user.lastname}`}
                 >
                   {feed.user.userInfo.firstname} {feed.user.userInfo.lastname} 

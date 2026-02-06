@@ -147,7 +147,7 @@ function Chats() {
   useEffect(() => {
     //After
     ws.current = new WebSocket(
-      `${WEB_SOC_BASE_URL}/chat/chats/${currentUser.id}`,
+      `${WEB_SOC_BASE_URL}/chat/chats/${currentUser.user?.id}`,
     );
 
     ws.current.onmessage = (event) => {
@@ -160,7 +160,7 @@ function Chats() {
         Notification.requestPermission();
 
         if (Notification.permission == "granted") {
-          new Notification(`${currentUser.firstname} Texted You`, {
+          new Notification(`${currentUser.user.firstname} Texted You`, {
             body: `MESSAGE: ${data.message}`
           })
         }
@@ -177,13 +177,13 @@ function Chats() {
         ws.current.close();
       }
     };
-  }, [currentUser.id, reciever_id]);
+  }, [currentUser.user?.id, reciever_id]);
 
   const ChatBubble = (messageObj) => {
-    if (messageObj.sender_id == currentUser.id) {
+    if (messageObj.sender_id == currentUser.user.id) {
       return (
         <div style={{ textAlign: "right" , paddingRight:"13px"}}>
-          <h4>{currentUser.firstname} {`(You)`} </h4>
+          <h4>{currentUser.user.firstname} {`(You)`} </h4>
           <p style={{marginTop:"5px"}}>{messageObj.message}</p>
         </div>
       );
