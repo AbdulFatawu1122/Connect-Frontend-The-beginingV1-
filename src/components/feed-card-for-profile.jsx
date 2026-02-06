@@ -285,10 +285,19 @@ function FeedCard({ feed }) {
       <div className={styles.card_container}>
         <div className={styles.profile}>
           <div className={styles.profile_image}>
-            <img 
-            src={`${BASE_URL}/src/uploads/${feed.user.profilePic.media.filename}`}
+            {
+              feed.user.profilePic.status ? (
+                <img 
+            src={`${BASE_URL}/src/uploads/${feed.user.profilePic.media?.filename}`}
             alt={`${feed.user.userInfo.firstname} profile picture`}
             />
+              ): (
+                <img 
+            src={`${BASE_URL}/src/uploads/no_profile.jpg`}
+            alt={`${feed.user.userInfo.firstname} profile picture`}
+            />
+              )
+             }
           </div>
           <div className={styles.info}>
             <div className={styles.profile_name_time}>
