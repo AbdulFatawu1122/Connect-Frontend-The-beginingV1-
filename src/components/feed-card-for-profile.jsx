@@ -305,7 +305,7 @@ function FeedCard({ feed }) {
                 <Link
                   style={{ textDecoration: "none" }}
                   to={`/user/${feed.user.userInfo.id}`}
-                  title={`${feed.user.firstname}, ${feed.user.lastname}`}
+                  title={`${feed.user.userInfo.firstname}, ${feed.user.userInfo.lastname}`}
                 >
                   {feed.user.userInfo.firstname} {feed.user.userInfo.lastname} 
                 </Link>
@@ -341,7 +341,6 @@ function FeedCard({ feed }) {
                   controls
                   key={media.id}
                   src={`${BASE_URL}/src/uploads/${media.filename}`}
-                  loading="lazy"
                 />
               );
             })}

@@ -22,7 +22,7 @@ function CommentsBoxComponent(comments) {
       <div className={styles.SignleComment}>
         <div className={styles.CommeterProfile}>
           <div className={styles.CommenterProfilePicture}>
-            {comments.comments.commenter.profile.status ? (
+            {comments.comments.commenter.profile?.status ? (
               <img
                 src={`${BASE_URL}/src/uploads/${comments.comments.commenter.profile.media?.filename}`}
                 alt={`${comments.comments.commenter.firstname} profile picture`}
