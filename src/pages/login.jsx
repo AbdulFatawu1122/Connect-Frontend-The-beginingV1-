@@ -69,7 +69,7 @@ function Login() {
       <div className={styles.content_wrapper}></div>
       <div className={styles.message}>
         <h1>Welecome to Connect</h1>
-          <p>Connecting you to the world of AI</p>
+          <p>Connecting you to new online environment</p>
           <p>Log In to your account to Connect to people who matter.</p>
       </div>
       <div className={styles.login_card}>

@@ -126,10 +126,9 @@ function SignUp() {
       <div className={styles.content_wrapper}>
         <div className={styles.message}>
           <h1>Welecome to Connect</h1>
-          <p>Connecting you to the world of AI</p>
+          <p>Connecting you to new online environment</p>
           <p>Open New account to Connect to people who matter.</p>
         </div>
-
         <div className={styles.sign_up_card}>
           <form onSubmit={handleSubmit}>
             <div className={styles.username}>

@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { useParams, useLocation } from "react-router-dom";
 import FeedCardForProfile from "../components/feed-card-for-profile";
-import InfiniteScroll
- from "react-infinite-scroll-component";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { BASE_URL } from "../apis/apis";
 
 function User() {
@@ -29,7 +28,6 @@ function User() {
   // Get the user id from the URL
   const { user_id } = useParams();
   //console.log(user_id);
-
 
   const verify_token = async () => {
     const token = sessionStorage.getItem("token");
@@ -96,37 +94,40 @@ function User() {
     }
   };
 
-  const fetchFeed = useCallback(async (pageNum) => {
-    try {
-      const token = sessionStorage.getItem("token");
-      const res = await fetch(
-        `${BASE_URL}/posts/userPosts?user_id=${user_id}&limit=5&page=${pageNum}`,
-        {
-          method: "Get",
-          headers: {
-            accept: "application/json",
-            Authorization: `Bearer ${token}`,
+  const fetchFeed = useCallback(
+    async (pageNum) => {
+      try {
+        const token = sessionStorage.getItem("token");
+        const res = await fetch(
+          `${BASE_URL}/posts/userPosts?user_id=${user_id}&limit=5&page=${pageNum}`,
+          {
+            method: "Get",
+            headers: {
+              accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           },
-        },
-      );
+        );
 
-      const result = await res.json();
-      console.log(result);
+        const result = await res.json();
+        console.log(result);
 
-      //Update data
-      //If page 1, replace data, if page 2+, append data
-      setFeeddata((prev) =>
-        pageNum === 1 ? result.data : [...prev, ...result.data],
-      );
+        //Update data
+        //If page 1, replace data, if page 2+, append data
+        setFeeddata((prev) =>
+          pageNum === 1 ? result.data : [...prev, ...result.data],
+        );
 
-      // Update hasMore
-      setHasMore(result.hasMore);
-      setLoadingInitial(false);
-    } catch (error) {
-      console.error("Fetch Error", error);
-      setLoadingInitial(false);
-    }
-  }, [user_id]); //add the user_id here so that when a user is change we clear the old data and uses the new one.
+        // Update hasMore
+        setHasMore(result.hasMore);
+        setLoadingInitial(false);
+      } catch (error) {
+        console.error("Fetch Error", error);
+        setLoadingInitial(false);
+      }
+    },
+    [user_id],
+  ); //add the user_id here so that when a user is change we clear the old data and uses the new one.
 
   const fetchFriends = async (user_id) => {
     const token = sessionStorage.getItem("token");
@@ -216,19 +217,39 @@ function User() {
                 Name: {currentUser.user?.firstname}, {currentUser.lastname}
               </h1>
               <h3>Email: {currentUser.user?.email} </h3>
-              <h4>Age: {currentUser.user?.age} years old </h4>
               <h4>BIO: {profileData.bio}</h4>
-              <h4>Town: {profileData.town} </h4>
-              <h3>Middle Name: {profileData.middlename} </h3>
+              <h4 style={{ textTransform: "capitalize" }}>
+                Town: {profileData.town}{" "}
+              </h4>
+              <h3 style={{ textTransform: "capitalize" }}>
+                Middle Name: {profileData.middlename}{" "}
+              </h3>
+              <h3 style={{ textTransform: "capitalize" }}>
+                Hobby: {profileData?.hobby}
+              </h3>
+              <h3 style={{ textTransform: "capitalize" }}>
+                Relationship: {profileData?.relationship_status}
+              </h3>
+              <h3 style={{ textTransform: "capitalize" }}>
+                Gender: {currentUser.user?.gender}
+              </h3>
+              <h3 style={{ textTransform: "capitalize" }}>
+                School: {currentUser.user?.schoolname}
+              </h3>
+              <h3 style={{ textTransform: "capitalize" }}>
+                Program: {currentUser.user?.course_name}
+              </h3>
               <h3>
                 Date of Birth:{" "}
-                {format(Date(profileData.date_of_birth), "dd, MMMM yyyy")}{" "}
+                {currentUser.user?.date_of_birth
+                  ? formatDate(currentUser.user?.date_of_birth)
+                  : "Loading..."}
               </h3>
             </div>
             <div className="relationships">
-              <h1>{currentUser.firstname} Friends</h1>
+              <h1>{currentUser.user?.firstname} Friends</h1>
               <h3>
-                {currentUser.firstname} have {totla_firends} Friends
+                {currentUser.user?.firstname} have {totla_firends} Friends
               </h3>
               {friends.map((friend) => (
                 <div key={friend.user?.id} className="my-firends-list">
@@ -255,11 +276,13 @@ function User() {
                   hasMore={hasMore}
                   loader={<h4>Loading More Post</h4>}
                   endMessage={
-                  <div>
-                  <h1 style={{ textAlign: "center" }}>You have Reach the end of posts</h1>
-                  <div style={{ textAlign: "center" }}>{feedLenght()}</div>
-                  </div>
-                }
+                    <div>
+                      <h1 style={{ textAlign: "center" }}>
+                        You have Reach the end of posts
+                      </h1>
+                      <div style={{ textAlign: "center" }}>{feedLenght()}</div>
+                    </div>
+                  }
                   scrollThreshold={0.9}
                 >
                   <div>
@@ -269,7 +292,6 @@ function User() {
                   </div>
                 </InfiniteScroll>
               )}
-    
             </div>
           </div>
         )}
