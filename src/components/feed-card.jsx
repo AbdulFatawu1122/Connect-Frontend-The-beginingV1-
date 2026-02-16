@@ -19,6 +19,7 @@ function FeedCard({ feed }) {
   const [commentContent, setCommentContent] = useState("");
 
   const [loadedComments, setLoadedComments] = useState([]);
+  const [loadingLikers, setLoadingLikers] = useState(false);
 
   const [messages, setMessages] = useState([]);
   const soundURL = "/facebook_likes.mp3";
@@ -38,6 +39,16 @@ function FeedCard({ feed }) {
     console.log(showPost);
   };
 
+  const JusNowCalculator = (timestamp) => {
+    const currentTime = new Date();
+    const timeCreated = new Date(timestamp);
+    const reminder_milicons = currentTime - timeCreated;
+    if (reminder_milicons <= 60000) {
+      return "Just Now";
+    } else {
+      return <TimeAgo date={timestamp} />;
+    }
+  };
   const ws = useRef(null);
 
   const OpenCommentsBox = async (post_id) => {
@@ -65,7 +76,9 @@ function FeedCard({ feed }) {
       console.log("Falied to load comments", error);
     }
     //After loading all comments we start live comments
-    ws.current = new WebSocket(`${WEB_SOC_BASE_URL}/posts/ws-comments/${post_id}`);
+    ws.current = new WebSocket(
+      `${WEB_SOC_BASE_URL}/posts/ws-comments/${post_id}`,
+    );
 
     ws.current.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -244,10 +257,8 @@ function FeedCard({ feed }) {
   };
 
   const LikersList = (list) => {
-        return list.map((liker) => (
-           liker.firstname
-        ))
-  }
+    return list.map((liker) => liker.firstname);
+  };
 
   return (
     <div className={styles.post_card}>
@@ -255,19 +266,17 @@ function FeedCard({ feed }) {
         <h1>{feed.user.profilePic.status}</h1>
         <div className={styles.profile}>
           <div className={styles.profile_image}>
-             {
-              feed.user.profilePic.status ? (
-                <img 
-            src={`${BASE_URL}/src/uploads/${feed.user.profilePic.media?.filename}`}
-            alt={`${feed.user.userInfo.firstname} profile picture`}
-            />
-              ): (
-                <img 
-            src={`${BASE_URL}/src/uploads/no_profile.jpg`}
-            alt={`${feed.user.userInfo.firstname} profile picture`}
-            />
-              )
-             }
+            {feed.user.profilePic.status ? (
+              <img
+                src={`${feed.user.profilePic.media?.filename}`}
+                alt={`${feed.user.userInfo.firstname} profile picture`}
+              />
+            ) : (
+              <img
+                src="https://vggbohfgmxodbzvbbrad.supabase.co/storage/v1/object/public/CoonectStorage/Asserts/no_profile.jpg"
+                alt={`${feed.user.userInfo.firstname} profile picture`}
+              />
+            )}
           </div>
           <div className={styles.info}>
             <div className={styles.profile_name_time}>
@@ -279,10 +288,10 @@ function FeedCard({ feed }) {
                 >
                   {feed.user.userInfo.firstname} {feed.user.userInfo.lastname}
                 </Link>
-                {feed.is_profile && ("  Updated Profile")}
+                {feed.is_profile && "  Updated Profile"}
               </p>
               <p className={styles.time_ago}>
-                <TimeAgo date={feed.time_created} />
+                {JusNowCalculator(feed.time_created)}
               </p>
             </div>
           </div>
@@ -313,7 +322,7 @@ function FeedCard({ feed }) {
                 <img
                   onClick={ShowMediaFull}
                   key={media.id}
-                  src={`${BASE_URL}/src/uploads/${media?.filename}`}
+                  src={media?.filename}
                   loading="lazy"
                 />
               ) : (
@@ -321,7 +330,7 @@ function FeedCard({ feed }) {
                   onClick={ShowMediaFull}
                   controls
                   key={media.id}
-                  src={`${BASE_URL}/src/uploads/${media?.filename}`}
+                  src={media?.filename}
                   loading="lazy"
                 />
               );
@@ -330,7 +339,10 @@ function FeedCard({ feed }) {
         </div>
         <div className={styles.buttomStats}>
           <div className={styles.likesLove}>
-            <button title={LikersList(feed.likers)} onClick={() => LikePost(feed.id)}>
+            <button
+              title={LikersList(feed.likers)}
+              onClick={() => LikePost(feed.id)}
+            >
               👍🏻 {totalLikes ? totalLikes : feed.likes}
             </button>
           </div>

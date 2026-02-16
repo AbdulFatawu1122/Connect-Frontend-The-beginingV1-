@@ -19,8 +19,10 @@ function FeedCard({ feed }) {
   const [commentContent, setCommentContent] = useState("");
 
   const [loadedComments, setLoadedComments] = useState([]);
+  const [loadingComments, setLoadingComments] = useState(false);
 
   const [postLikers, setPostLikers] = useState([]);
+  const [loadingLikers, setLoadingLikers] = useState(false);
 
   const [messages, setMessages] = useState([]);
   const soundURL = "/facebook_likes.mp3";
@@ -39,6 +41,16 @@ function FeedCard({ feed }) {
     setShowPost(false);
     console.log(showPost);
   };
+  const JusNowCalculator = (timestamp) => {
+    const currentTime = new Date();
+    const timeCreated = new Date(timestamp);
+    const reminder_milicons = currentTime - timeCreated;
+    if (reminder_milicons <= 60000) {
+      return "Just Now";
+    } else {
+      return <TimeAgo date={timestamp} />;
+    }
+  };
 
   const ws = useRef(null);
 
@@ -48,6 +60,7 @@ function FeedCard({ feed }) {
 
     console.log("You have open the comments box");
     const token = sessionStorage.getItem("token");
+    setLoadingComments(true);
     try {
       const res = await fetch(
         `${BASE_URL}/posts/loadComments?post_id=${post_id}`,
@@ -63,6 +76,7 @@ function FeedCard({ feed }) {
         const data = await res.json();
         setLoadedComments(data);
       }
+      setLoadingComments(false);
     } catch (error) {
       console.log("Falied to load comments", error);
     }
@@ -109,6 +123,7 @@ function FeedCard({ feed }) {
         //alert("Comment added Succefully");
         //OpenCommentsBox();
         setCommentContent("");
+        feed.total_comments += 1;
       }
     } catch (error) {
       console.log("Falied to add comment");
@@ -174,23 +189,27 @@ function FeedCard({ feed }) {
         <div className={styles.CommentsDisplaBox}>
           <button onClick={closeCommentsBox}>❌</button>
           <div className={styles.CommentsContent}>
-            <div>
-              {loadedComments.length >= 1 ? (
-                <div>
-                  {loadedComments.map((comment) => {
-                    if (feed.id === comment.comment.post_id) {
-                      return (
-                        <div key={comment?.comment?.id}>
-                          <CommentsBoxComponent comments={comment} />
-                        </div>
-                      );
-                    }
-                  })}
-                </div>
-              ) : (
-                <h1>No comments for this Post</h1>
-              )}
-            </div>
+            {loadingComments ? (
+              <h4>Loading Post Comments</h4>
+            ) : (
+              <div>
+                {loadedComments.length >= 1 ? (
+                  <div>
+                    {loadedComments.map((comment) => {
+                      if (feed.id === comment.comment.post_id) {
+                        return (
+                          <div key={comment?.comment?.id}>
+                            <CommentsBoxComponent comments={comment} />
+                          </div>
+                        );
+                      }
+                    })}
+                  </div>
+                ) : (
+                  <h1>No comments for this Post</h1>
+                )}
+              </div>
+            )}
           </div>
           <div className={styles.TypeCommentsInput}>
             <input
@@ -249,6 +268,7 @@ function FeedCard({ feed }) {
 
   const LoadLikersProfile = async (post_id) => {
     const token = sessionStorage.getItem("token");
+    setLoadingLikers(true);
     try {
       const res = await fetch(
         `${BASE_URL}/posts/loadLikers?post_id=${post_id}`,
@@ -265,6 +285,7 @@ function FeedCard({ feed }) {
         setPostLikers(data);
         console.log(data);
       }
+      setLoadingLikers(false);
     } catch (error) {
       console.log("Falied to load Likers", error);
     }
@@ -285,19 +306,17 @@ function FeedCard({ feed }) {
       <div className={styles.card_container}>
         <div className={styles.profile}>
           <div className={styles.profile_image}>
-            {
-              feed.user.profilePic.status ? (
-                <img 
-            src={`${BASE_URL}/src/uploads/${feed.user.profilePic.media?.filename}`}
-            alt={`${feed.user.userInfo.firstname} profile picture`}
-            />
-              ): (
-                <img 
-            src={`${BASE_URL}/src/uploads/no_profile.jpg`}
-            alt={`${feed.user.userInfo.firstname} profile picture`}
-            />
-              )
-             }
+            {feed.user.profilePic.status ? (
+              <img
+                src={`${feed.user.profilePic.media?.filename}`}
+                alt={`${feed.user.userInfo.firstname} profile picture`}
+              />
+            ) : (
+              <img
+                src="https://vggbohfgmxodbzvbbrad.supabase.co/storage/v1/object/public/CoonectStorage/Asserts/no_profile.jpg"
+                alt={`${feed.user.userInfo.firstname} profile picture`}
+              />
+            )}
           </div>
           <div className={styles.info}>
             <div className={styles.profile_name_time}>
@@ -307,14 +326,13 @@ function FeedCard({ feed }) {
                   to={`/user/${feed.user.userInfo.id}`}
                   title={`${feed.user.userInfo.firstname}, ${feed.user.userInfo.lastname}`}
                 >
-                  {feed.user.userInfo.firstname} {feed.user.userInfo.lastname} 
+                  {feed.user.userInfo.firstname} {feed.user.userInfo.lastname}
                 </Link>
-                 {feed.is_profile && ("  Updated Profile")}
+                {feed.is_profile && "  Updated Profile"}
               </p>
               <p className={styles.time_ago}>
-                <TimeAgo date={feed.time_created} />
+                {JusNowCalculator(feed.time_created)}
               </p>
-              
             </div>
           </div>
         </div>
@@ -332,7 +350,7 @@ function FeedCard({ feed }) {
                 <img
                   onClick={ShowMediaFull}
                   key={media.id}
-                  src={`${BASE_URL}/src/uploads/${media.filename}`}
+                  src={`${media.filename}`}
                   loading="lazy"
                 />
               ) : (
@@ -340,7 +358,7 @@ function FeedCard({ feed }) {
                   onClick={ShowMediaFull}
                   controls
                   key={media.id}
-                  src={`${BASE_URL}/src/uploads/${media.filename}`}
+                  src={`${media.filename}`}
                 />
               );
             })}
@@ -349,7 +367,9 @@ function FeedCard({ feed }) {
         <div className={styles.buttomStats}>
           <div className={styles.likesLove}>
             <button
-              title={`Like by\n${LikersList()}`}
+              title={
+                loadingLikers ? "Loading......." : `Like by\n${LikersList()}`
+              }
               onMouseEnter={() => LoadLikersProfile(feed.id)}
               onClick={() => LikePost(feed.id)}
             >

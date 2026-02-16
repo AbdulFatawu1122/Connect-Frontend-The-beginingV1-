@@ -68,6 +68,7 @@ function SignUp() {
         navigate("/");
       } else {
         alert("Failed to Log In Automatically, Please you your details to Log In. Thank You");
+        navigate("/login")
       }
     } catch (error) {
       setLoading(false);

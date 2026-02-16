@@ -1,8 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useSubmit } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
-
-
+import { Link } from "react-router-dom";
 import styles from "../css/home.module.css";
 
 import FeedCardForProfile from "../components/feed-card-for-profile";
@@ -17,6 +16,10 @@ function Home() {
   const [currentUser, setCurrentUser] = useState([]);
   const [profileData, setProfileData] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [friends, setFriends] = useState([]);
+  const [suggested, setSuggested] = useState([]);
+  const [loadingHomeData, setLoadingHomeData] = useState(false);
 
   const [FeedData, setFeeddata] = useState([]);
   const [page, setPage] = useState(1);
@@ -36,9 +39,12 @@ function Home() {
         },
       });
 
-      const data = await current_user.json();
-      // console.log(data);
-      setCurrentUser(data);
+      if (current_user.ok) {
+        const data = await current_user.json();
+        setCurrentUser(data);
+      } else if (current_user.status === 404) {
+        navigate("/login");
+      }
     } catch (eeror) {
       console.log("Fail to get Current User");
     }
@@ -57,8 +63,7 @@ function Home() {
 
       if (response.ok) {
         // console.log("Login");
-        get_current_user();
-        fetch_profile();
+        //fetchHomeData();
       } else {
         navigate("/login");
       }
@@ -98,7 +103,7 @@ function Home() {
             accept: "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       const result = await res.json();
@@ -107,7 +112,7 @@ function Home() {
       //Update data
       //If page 1, replace data, if page 2+, append data
       setFeeddata((prev) =>
-        pageNum === 1 ? result.data : [...prev, ...result.data]
+        pageNum === 1 ? result.data : [...prev, ...result.data],
       );
 
       // Update hasMore
@@ -119,13 +124,88 @@ function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    verify_token();
-  }, [navigate]);
+  const fetchFriends = async () => {
+    const token = sessionStorage.getItem("token");
+    try {
+      const friend_profile = await fetch(`${BASE_URL}/user/my-friends`, {
+        method: "Get",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await friend_profile.json();
+      // console.log(data);
+      setFriends(data);
+    } catch (eeror) {
+      console.log("Fail to load friends");
+    }
+  };
+
+  //Fetch suggested user
+  const fetchSuggested = async () => {
+    const token = sessionStorage.getItem("token");
+    try {
+      const friend_profile = await fetch(`${BASE_URL}/user/sugestions`, {
+        method: "Get",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await friend_profile.json();
+      //console.log(data);
+      setSuggested(data);
+    } catch (eeror) {
+      console.log("Fail to load Suggested Friends");
+    }
+  };
+
+  const handleAddFriend = async (user_id) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const response = await fetch(
+        `${BASE_URL}/user/friends?friend_id=${user_id}`,
+        {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      fetchFriends();
+      fetchSuggested();
+    } catch (error) {
+      console.error("Failed to add Friend");
+    }
+  };
+
+  const fetchHomeData = async () => {
+    setLoadingHomeData(true);
+    await fetchFriends();
+    await fetchSuggested();
+    await fetch_profile();
+    await get_current_user();
+    setLoadingHomeData(false);
+  };
+
+  const entryToConnect = async () => {
+    setLoadingHomeData(true);
+    await fetchFriends();
+    await fetchSuggested();
+    await fetch_profile();
+    await get_current_user();
+    await verify_token();
+    await fetchFeed(1);
+    setLoadingHomeData(false);
+  };
 
   useEffect(() => {
-    fetchFeed(1);
-  }, [fetchFeed]);
+    entryToConnect();
+  }, [navigate, fetchFeed]);
 
   // Loading more
   const loadNextPage = () => {
@@ -161,42 +241,175 @@ function Home() {
       </div>
     );
   };
-
-  
-
   const feedTotal = FeedData.length;
-  return (
-    <div className="main-home">
-      <div>
+
+  return loadingHomeData ? (
+    <div className={styles.connectLogo}>
+      <p>C</p>
+      <div className={styles.connectName}>
+        <h2>Connect</h2>
+        <span>Connecting you to peope that matter!</span>
+      </div>
+      <div className={styles.dots_loader}>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  ) : (
+    <div className={styles.mainHome}>
+      <div className={styles.navBar}>
         <NavBar />
       </div>
-      <div>
-        <h1 style={{ paddingTop: "70px" }}>Hello, {currentUser.user?.firstname}</h1>
-      </div>
-
-      <div style={{ textAlign: "center", backgroundColor: "yellow" }}>
-        <h1>What others Shared ({feedTotal}) </h1>
-      </div>
-
-      <div>
-        {LoadingInitial ? (
-          FeedLoadingAninmate()
-        ) : (
-          <InfiniteScroll
-            dataLength={FeedData.length}
-            next={loadNextPage}
-            hasMore={hasMore}
-            loader={FeedLoadingAninmate()}
-            endMessage={feedLenght()}
-            scrollThreshold={0.9} //load more post when user is 200px from the buttom
-          >
-            <div>
-              {FeedData.map((post) => {
-                return <FeedCardForProfile key={post.id} feed={post} />;
-              })}
+      <div className={styles.mainContent}>
+        <div className={styles.leftContent}>
+          {loadingHomeData ? (
+            <p>Loading data....</p>
+          ) : (
+            <div className={styles.ProfileInfo}>
+              <div className={styles.profile_image}>
+                {currentUser.profile?.status ? (
+                  <img
+                    src={`${currentUser.profile.media?.filename}`}
+                    alt={`${currentUser.user?.firstname} profile picture`}
+                  />
+                ) : (
+                  <img
+                    src="https://vggbohfgmxodbzvbbrad.supabase.co/storage/v1/object/public/CoonectStorage/Asserts/no_profile.jpg"
+                    alt={`${currentUser.user?.firstname} profile picture`}
+                  />
+                )}
+              </div>
+              <div className={styles.info}>
+                <p>
+                  {currentUser.user?.firstname} {currentUser.user?.lastname}
+                </p>
+                <p>{currentUser.user?.email}</p>
+                <p>{profileData.middlename}</p>
+                <p>{profileData.bio}</p>
+              </div>
             </div>
-          </InfiniteScroll>
-        )}
+          )}
+        </div>
+        <div className={styles.middleContent}>
+          <div>
+            <div style={{ paddingTop: "70px" }}>
+              {loadingHomeData ? (
+                <p>Loading....</p>
+              ) : (
+                <h2>Hello, {currentUser.user?.firstname}</h2>
+              )}
+            </div>
+          </div>
+          <div>
+            {LoadingInitial ? (
+              FeedLoadingAninmate()
+            ) : (
+              <InfiniteScroll
+                dataLength={FeedData.length}
+                next={loadNextPage}
+                hasMore={hasMore}
+                loader={FeedLoadingAninmate()}
+                endMessage={feedLenght()}
+                scrollThreshold={0.9} //load more post when user is 200px from the buttom
+              >
+                <div>
+                  {FeedData.map((post) => {
+                    return <FeedCardForProfile key={post.id} feed={post} />;
+                  })}
+                </div>
+              </InfiniteScroll>
+            )}
+          </div>
+        </div>
+        <div className={styles.rightContent}>
+          <div className={styles.rightMessage}>
+            <h2>Welecome to Connect.</h2>
+            <p>
+              Lets Connect you to peope you will like to meet as new friends
+            </p>
+          </div>
+          {loadingHomeData ? (
+            <p>Loading Contacts</p>
+          ) : (
+            friends.length > 0 && (
+              <div className={styles.contacts}>
+                <h2>Contacts</h2>
+                <p>Click on contact to start chatting</p>
+                {friends.map((friend) => (
+                  <div key={friend.user?.id} className={styles.myFriendinfo}>
+                    <Link
+                      style={{ textDecoration: "none" }}
+                      to={`/chats/${friend.user?.id}`}
+                    >
+                      <div className={styles.contactsProfileImage}>
+                        {friend.profilePic.status ? (
+                          <img
+                            src={`${friend.profilePic.media?.filename}`}
+                            alt={`${friend.user?.firstname} profile picture`}
+                          />
+                        ) : (
+                          <img
+                            src="https://vggbohfgmxodbzvbbrad.supabase.co/storage/v1/object/public/CoonectStorage/Asserts/no_profile.jpg"
+                            alt={`${friend.user?.firstname} profile picture`}
+                          />
+                        )}
+                      </div>
+                      <div className={styles.friendName}>
+                        {friend.user?.firstname} {friend.user?.lastname}
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )
+          )}
+          {loadingHomeData ? (
+            <p>Loading people you may know</p>
+          ) : (
+            suggested.length > 0 && (
+              <div className={styles.newFriends}>
+                <h2>People you may Know</h2>
+                <div className={styles.suggestedFriends}>
+                  {suggested.map((friend) => (
+                    <div key={friend.user?.id} className={styles.friendToAdd}>
+                      <div className={styles.friendsNameandProfilePic}>
+                        <div className={styles.suggestedProfilePic}>
+                          {friend.profilePic.status ? (
+                            <img
+                              src={`${friend.profilePic.media?.filename}`}
+                              alt={`${friend.user?.firstname} profile picture`}
+                            />
+                          ) : (
+                            <img
+                              src="https://vggbohfgmxodbzvbbrad.supabase.co/storage/v1/object/public/CoonectStorage/Asserts/no_profile.jpg"
+                              alt={`${friend.user?.firstname} profile picture`}
+                            />
+                          )}
+                        </div>
+                        <div className={styles.friendsName}>
+                          <Link
+                            style={{ textDecoration: "none" }}
+                            to={`/user/${friend.user?.id}`}
+                          >
+                            {friend.user?.firstname} {friend.user?.lastname}
+                          </Link>
+                        </div>
+                      </div>
+                      <div className={styles.add_button}>
+                        <button
+                          onClick={() => handleAddFriend(friend.user?.id)}
+                        >
+                          Add Friend
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          )}
+        </div>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useParams, useLocation } from "react-router-dom";
 import NavBar from "../components/navbar";
 import FeedCard from "../components/feed-card";
-import styles from "../css/profile.module.css";
+import styles from "../css/chats.module.css";
 import { format, parseISO } from "date-fns";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -17,13 +17,28 @@ function Chats() {
   const [inputValue, setInputValue] = useState("");
   const [friendProfile, setFriendProfile] = useState({});
 
+  const scrollRef = useRef(null);
+  const messageRecievedSoundURL = "/messageRecieved.mp3";
+  const messageSentSoundURL = "/messagesent2.mp3";
+  const playSound = (soundURL) => {
+    new Audio(soundURL).play().catch((e) => {
+      console.log("Falied to play Sound");
+    });
+  };
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]); // This triggers every time a new message is added
+
   const navigate = useNavigate();
 
   const { reciever_id } = useParams();
   //console.log(reciever_id);
 
   //Requesting notification access
-  Notification.requestPermission();
+  // Notification.requestPermission();
 
   const verify_token = async () => {
     const token = sessionStorage.getItem("token");
@@ -87,13 +102,12 @@ function Chats() {
       console.log("Fail to Load Messages");
     }
   };
-  
 
   const fetch_friends_profile = async (user_id) => {
     const token = sessionStorage.getItem("token");
     try {
       const user_profile = await fetch(
-        `${BASE_URL}/user/get-profile?user_id=${user_id}`,
+        `${BASE_URL}/user/user-to-get?user_id=${user_id}`,
         {
           method: "Get",
           headers: {
@@ -130,7 +144,9 @@ function Chats() {
       if (res.ok) {
         const data = await res.json();
         //console.log(data);
+
         setMessages((prevMessage) => [...prevMessage, data]);
+        playSound(messageSentSoundURL);
       }
     } catch (eeror) {
       console.log("Fail to get Current User");
@@ -156,16 +172,12 @@ function Chats() {
       if (data.sender_id == reciever_id) {
         setMessages((prevMessage) => [...prevMessage, data]);
 
-
         Notification.requestPermission();
-
+        playSound(messageRecievedSoundURL);
         if (Notification.permission == "granted") {
           new Notification(`${currentUser.user.firstname} Texted You`, {
-            body: `MESSAGE: ${data.message}`
-          })
-        }
-        else{
-          alert("New Message");
+            body: `MESSAGE: ${data.message}`,
+          });
         }
       } else {
         console.log("Data from another friend");
@@ -180,55 +192,89 @@ function Chats() {
   }, [currentUser.user?.id, reciever_id]);
 
   const ChatBubble = (messageObj) => {
-    if (messageObj.sender_id == currentUser.user.id) {
+    if (messageObj.sender_id == currentUser.user?.id) {
       return (
-        <div style={{ textAlign: "right" , paddingRight:"13px"}}>
-          <h4>{currentUser.user.firstname} {`(You)`} </h4>
-          <p style={{marginTop:"5px"}}>{messageObj.message}</p>
+        <div className={styles.currentUser}>
+          <div className={styles.currentUserName}></div>
+          <div className={styles.currentUserMessage}>
+            <p>{messageObj.message}</p>
+          </div>
         </div>
       );
     } else {
       return (
-        <div style={{ textAlign: "left", paddingLeft:"13px" }}>
-          <h4>{friendProfile.user?.firstname}</h4>
-          <p style={{marginTop:"5px"}}>{messageObj.message}</p>
+        <div className={styles.otherUser}>
+          <div className={styles.otherUserMessage}>
+            <p>{messageObj.message}</p>
+          </div>
         </div>
       );
     }
   };
-
   return (
-    <div>
-      <h1>Hello, {currentUser.user?.firstname} welcome to ConnectChat.</h1>
-      <h2>Chat with {friendProfile.user?.firstname} </h2>
-      
-      <h1>Here</h1>
-      {messages.map((ms) => (
-        <div key={ms.id}>
-            {ChatBubble(ms)}
+    <div className={styles.ChatHome}>
+      <div className={styles.messageTop}>
+        <div className={styles.profileImage}>
+          {friendProfile.profile?.status ? (
+            <img
+              src={`${friendProfile.profile.media?.filename}`}
+              alt={`${friendProfile.user?.firstname} profile picture`}
+            />
+          ) : (
+            <img
+              src="https://vggbohfgmxodbzvbbrad.supabase.co/storage/v1/object/public/CoonectStorage/Asserts/no_profile.jpg"
+              alt={`${friendProfile.user?.firstname} profile picture`}
+            />
+          )}
         </div>
-      ))}
-      ;
-
-
-      <input
-        onKeyDown={(e) => {
-          if (e.key == "Enter" && !e.shiftKey) {
-            //e.preventDefault();
+        <div className={styles.userInfo}>
+          <h1>
+            {friendProfile.user?.firstname} {friendProfile.user?.lastname}
+          </h1>
+          <h2>{friendProfile.user?.email}</h2>
+        </div>
+      </div>
+      <div className={styles.messagesBody}>
+        <div className={styles.ecryptionMessage}>
+          <p>
+            Messages are end-to-end ecrptypted. No one can have access to your
+            messages not even Connect. learn more..
+          </p>
+        </div>
+        {messages.map((ms) => (
+          <div key={ms.id} className={styles.message}>
+            {ChatBubble(ms)}
+          </div>
+        ))}
+        <div ref={scrollRef} />
+      </div>
+      <div className={styles.TextBox}>
+        <textarea
+          onKeyDown={(e) => {
+            if (e.key == "Enter") {
+              e.preventDefault();
+              setInputValue("");
+              handleSendMessage(reciever_id);
+            }
+          }}
+          type="text"
+          value={inputValue}
+          onSubmit={() => {
             setInputValue("");
+          }}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Type Message"
+          style={{ width: "300px" }}
+        />
+        <button
+          onClick={() => {
             handleSendMessage(reciever_id);
-          }
-        }}
-        type="text"
-        value={inputValue}
-        onSubmit={() => {
-          setInputValue("");
-        }}
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder="Type Message"
-        style={{ width: "300px" }}
-      />
-      <button onClick={() => handleSendMessage(reciever_id)}>Send</button>
+            setInputValue("");
+          }}
+        >
+          Send
+        </button>
+      </div>
     </div>
   );
 }

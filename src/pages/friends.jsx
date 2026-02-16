@@ -5,7 +5,6 @@ import styles from "../css/friends.module.css";
 
 import { BASE_URL } from "../apis/apis";
 
-
 import { Link } from "react-router-dom";
 
 function FriendsPage() {
@@ -92,31 +91,41 @@ function FriendsPage() {
             accept: "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
-      fetchFriendsRelatedData();
+      if (response.ok) {
+        fetchFriendsRelatedData();
+      } else {
+        alert(
+          "This user already sent you a request go to friends tab to accep",
+        );
+      }
     } catch (error) {
       console.error("Failed to add Friend");
     }
   };
 
-  const handleAcceptFriend = async (user_id) => {
+  const handleAcceptFriend = async (friend_id) => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("token");
       const response = await fetch(
-        `${BASE_URL}/user/accept-friend?friend_id=${user_id}`,
+        `${BASE_URL}/user/accept-friend?friend_id=${friend_id}`,
         {
           method: "POST",
           headers: {
             accept: "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
-      fetchFriendsRelatedData();
+      if (response.ok) {
+        fetchFriendsRelatedData();
+      } else {
+        alert("Failed to accept friend");
+      }
     } catch (error) {
       console.error("Failed to aceept Friend");
     }
@@ -169,10 +178,6 @@ function FriendsPage() {
 
   useEffect(() => {
     fetchFriendsRelatedData();
-
-    const fetch_interval = setInterval(fetchFriendsRelatedData, 1000);
-
-    return () => clearInterval(fetch_interval);
   }, []);
 
   useEffect(() => {
@@ -199,20 +204,20 @@ function FriendsPage() {
           <h1>My Friends</h1>
           <h3>You have {totla_firends} Friends</h3>
           {friends.map((friend) => (
-            <div key={friend.id} className={styles.my_firends_list}>
+            <div key={friend.user?.id} className={styles.my_firends_list}>
               <Link
                 style={{ textDecoration: "none" }}
-                to={`/user/${friend.id}`}
+                to={`/user/${friend.user?.id}`}
               >
                 <div className={styles.info}>
-                  {friend.firstname} {friend.lastname}
+                  {friend.user?.firstname} {friend.user?.lastname}
                 </div>
               </Link>
             </div>
           ))}
         </div>
 
-        <div className={styles.add_new_friends}>
+        <div className={styles.suggestionList}>
           <h1>Add New Friends ({suggested_total}) </h1>
           <div className={styles.searchBar}>
             <input
@@ -223,43 +228,63 @@ function FriendsPage() {
             />
           </div>
           <p>Searching for " {searchqQuery} "</p>
-          {suggested.map(
-            (friend) =>
-              friend.firstname.toLowerCase().includes(searchqQuery) && (
-                <div key={friend.id}>
-                  <div className={styles.pro_img}></div>
-                  <div className={styles.info}>
-                    <Link
-                      style={{ textDecoration: "none" }}
-                      to={`/user/${friend.id}`}
-                    >
-                      {friend.firstname} {friend.lastname}
-                    </Link>
+          <div className={styles.newFriends}>
+            {suggested.map(
+              (friend) =>
+                friend.user?.firstname.toLowerCase().includes(searchqQuery) && (
+                  <div key={friend.user?.id} className={styles.newFriendToadd}>
+                    <div className={styles.pro_img}>
+                      {friend.profilePic.status ? (
+                        <img
+                          src={`${friend.profilePic.media?.filename}`}
+                          alt={`${friend.user?.firstname} profile picture`}
+                        />
+                      ) : (
+                        <img
+                          src="https://vggbohfgmxodbzvbbrad.supabase.co/storage/v1/object/public/CoonectStorage/Asserts/no_profile.jpg"
+                          alt={`${friend.user?.firstname} profile picture`}
+                        />
+                      )}
+                    </div>
+                    <div className={styles.info}>
+                      <Link
+                        style={{ textDecoration: "none" }}
+                        to={`/user/${friend.user?.id}`}
+                      >
+                        {friend.user?.firstname} {friend.user?.lastname}
+                      </Link>
+                    </div>
+                    <div className={styles.add_button}>
+                      <button onClick={() => handleAddFriend(friend.user?.id)}>
+                        Add Friend
+                      </button>
+                    </div>
                   </div>
-                  <div className={styles.add_button}>
-                    <button onClick={() => handleAddFriend(friend.id)}>
-                      Add Friend
-                    </button>
-                  </div>
-                </div>
-              )
-          )}
+                ),
+            )}
+          </div>
         </div>
 
         <div className={styles.friends_to_add}>
           <h1>Friends To Accept({pending_total}) </h1>
           {pendingAccept.map((friend_to_accept) => (
-            <div key={friend_to_accept.id}>
+            <div key={friend_to_accept.user?.id}>
               <div className={styles.friends_info}>
                 <Link
                   style={{ textDecoration: "none" }}
-                  to={`/user/${friend_to_accept.id}`}
+                  to={`/user/${friend_to_accept.user?.id}`}
                 >
-                  <h4>{friend_to_accept.firstname} </h4>{" "}
+                  <h4>
+                    {friend_to_accept.user?.firstname}{" "}
+                    {friend_to_accept.user?.lastname}{" "}
+                    {friend_to_accept.user?.id}{" "}
+                  </h4>{" "}
                 </Link>
               </div>
               <div className={styles.accept_button}>
-                <button onClick={() => handleAcceptFriend(friend_to_accept.id)}>
+                <button
+                  onClick={() => handleAcceptFriend(friend_to_accept.user?.id)}
+                >
                   Accept Friend Request
                 </button>
               </div>
@@ -270,13 +295,13 @@ function FriendsPage() {
         <div className={styles.pending_to_accept}>
           <h1>Pending Request ({requested_total}) </h1>
           {requestISendPending.map((friend, index) => (
-            <div key={friend.id}>
+            <div key={friend.user?.id}>
               <Link
                 style={{ textDecoration: "none" }}
-                to={`/user/${friend.id}`}
+                to={`/user/${friend.user?.id}`}
               >
                 <h4>
-                  {friend.firstname} {friend.lastname}
+                  {friend.user?.firstname} {friend.user?.lastname}
                 </h4>
               </Link>
               <div className={styles.add_button}>

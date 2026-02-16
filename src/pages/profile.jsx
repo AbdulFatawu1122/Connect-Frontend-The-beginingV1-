@@ -133,9 +133,12 @@ function Profile() {
         },
       });
 
-      const data = await current_user.json();
-      // console.log(data);
-      setCurrentUser(data);
+     if (current_user.ok) {
+        const data = await current_user.json();
+        setCurrentUser(data);
+      } else if (current_user.status === 404) {
+        navigate("/login");
+      }
     } catch (eeror) {
       console.log("Fail to get Current User");
     }
@@ -303,7 +306,7 @@ function Profile() {
             <input
               className={styles.createPostInput}
               type="file"
-              accept="video/*,image/*"
+              accept="image/*"
               multiple
               onChange={(e) =>
                 setMediaFiles((prev) => [
@@ -379,8 +382,8 @@ function Profile() {
             <h1>
               Welecome On Board {currentUser.user?.firstname}, {currentUser.lastname}
             </h1>
-            <h3>Email: {currentUser.email} </h3>
-            <h4>Age: {currentUser.age} years old </h4>
+            <h3>Email: {currentUser.user?.email} </h3>
+            <h4>Age: {currentUser.user?.age} years old </h4>
             <h4>BIO: {profileData.bio}</h4>
             <h4>Town: {profileData.town} </h4>
             <h3>Middle Name: {profileData.middlename} </h3>
@@ -399,10 +402,10 @@ function Profile() {
         <h3>You have {totla_firends} Friends</h3>
         <h3>Click on firend to chat with</h3>
         {friends.map((friend) => (
-          <div key={friend.id} className={styles.my_firends_list}>
-            <Link style={{ textDecoration: "none" }} to={`/chats/${friend.id}`}>
+          <div key={friend.user?.id} className={styles.my_firends_list}>
+            <Link style={{ textDecoration: "none" }} to={`/chats/${friend.user?.id}`}>
               <div className={styles.info}>
-                {friend.firstname} {friend.lastname}
+                {friend.user?.firstname} {friend.user?.lastname}
               </div>
             </Link>
           </div>

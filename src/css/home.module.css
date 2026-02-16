@@ -1,29 +1,400 @@
+/* Container for the whole page */
+
+.connectLogo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* full page */
+    
+    /* Maintained sizing for desktop symmetry */
+}
+
+.connectLogo p {
+    /* Styles the 'J' text as the Facebook logo */
+    color: #1877f2; /* Facebook Blue */
+    font-size: 290px;
+    font-weight: 800;
+    margin: 0; /* Remove default margin from p tag */
+}
+
+.connectName h2 {
+  margin: 0;
+  text-align: center;
+}
 
 
 
+/* ===== THREE DOTS LOADER ===== */
+.dots_loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+}
 
+/* Dots */
+.dots_loader span {
+  width: 10px;
+  height: 10px;
+  background-color: #25d366; /* Change color if you want */
+  border-radius: 50%;
+  display: inline-block;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
 
-/* Loading Spinner for Feed */
-/* --- 1. The Shimmer Animation Keyframes --- */
-@keyframes placeholderShimmer {
-  0% {
-    background-position: -468px 0;
+/* Delay each dot */
+.dots_loader span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.dots_loader span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.dots_loader span:nth-child(3) {
+  animation-delay: 0s;
+}
+
+/* Animation */
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.4;
   }
-  100% {
-    background-position: 468px 0;
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+
+.mainHome {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  /* Light grey FB background */
+}
+
+/* Navbar stays at the top */
+.navBar {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+/* The Grid Layout */
+.mainContent {
+  display: grid;
+  /* Left: 280px, Middle: flexible, Right: 280px */
+  grid-template-columns: 280px 1fr 280px;
+  gap: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  /* Centers the whole layout on ultrawide screens */
+  width: 100%;
+  padding-top: 45px ;
+}
+
+/* Sticky Sidebars - so they stay put while you scroll the feed */
+.leftContent,
+.rightContent {
+  position: sticky;
+  top: 70px;
+  /* Adjust based on your Navbar height */
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+/* Middle Feed */
+.middleContent {
+  min-width: 0;
+  /* Prevents layout breaking from long strings */
+}
+
+
+
+/* Right side bar CSS___________________________ */
+/* --- CONTACTS SECTION --- */
+
+
+
+.rightContent {
+display: flex;
+flex-direction: column;
+gap: 20px;
+padding: 15px;
+}
+
+/* WELCOME MESSAGE */
+.rightMessage h2 {
+font-size: 1.1rem;
+font-weight: 700;
+color: #1c1e21;
+margin-bottom: 5px;
+}
+
+.rightMessage p {
+font-size: 0.9rem;
+color: #65676b;
+line-height: 1.4;
+}
+
+/* HEADERS */
+.contacts h2, .newFriends h2 {
+font-size: 1rem;
+font-weight: 600;
+color: #65676b;
+margin: 15px 0 5px 0;
+}
+
+.contacts p {
+font-size: 0.8rem;
+color: #8a8d91;
+margin-bottom: 10px;
+}
+
+/* CONTACTS LIST */
+.myFriendinfo {
+border-radius: 8px;
+transition: background 0.2s;
+}
+
+.myFriendinfo:hover {
+background-color: #f0f2f5;
+}
+
+.myFriendinfo a {
+display: flex;
+align-items: center;
+padding: 8px;
+gap: 12px;
+}
+
+.contactsProfileImage {
+width: 36px;
+height: 36px;
+border-radius: 50%;
+overflow: hidden;
+background-color: #e4e6eb;
+flex-shrink: 0;
+}
+
+.contactsProfileImage img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.friendName {
+font-size: 0.95rem;
+font-weight: 500;
+color: #050505;
+}
+
+/* SUGGESTED FRIENDS SECTION */
+.suggestedFriends {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.friendToAdd {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 10px;
+background-color: #ffffff;
+border-radius: 8px;
+border: 1px solid #dddfe2;
+}
+
+.friendsNameandProfilePic {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.suggestedProfilePic {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+background-color: #e4e6eb;
+overflow: hidden;
+flex-shrink: 0;
+}
+
+/* If you add an img tag inside suggestedProfilePic later */
+.suggestedProfilePic img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.friendsName a {
+font-size: 0.9rem;
+font-weight: 600;
+color: #050505;
+}
+
+/* ADD FRIEND BUTTON */
+.add_button button {
+background-color: #e7f3ff;
+color: #1877f2;
+border: none;
+padding: 7px 12px;
+border-radius: 6px;
+font-weight: 600;
+font-size: 0.85rem;
+cursor: pointer;
+white-space: nowrap;
+}
+
+.add_button button:hover {
+background-color: #dbeafe;
+}
+
+
+/* End of Right Side -_------------------------------------ */
+
+/* Sidebar Container */
+.leftContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+/* Loading State Styling */
+.leftContent>p {
+  text-align: center;
+  color: #65676b;
+  font-size: 0.9rem;
+  margin-top: 20px;
+  font-style: italic;
+}
+
+/* Profile Card Container */
+.ProfileInfo {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+  transition: transform 0.2s ease;
+}
+
+.ProfileInfo:hover {
+  transform: translateY(-2px);
+  /* Subtle lift effect */
+}
+
+/* Profile Image Handling */
+.profile_image {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.profile_image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #f0f2f5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Info Text Styling */
+.info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Full Name */
+.info p:nth-child(1) {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1c1e21;
+  margin: 0;
+}
+
+/* Email */
+.info p:nth-child(2) {
+  font-size: 0.85rem;
+  color: #1877f2;
+  /* Blue to make the email stand out */
+  margin: 0;
+}
+
+/* Middle Name */
+.info p:nth-child(3) {
+  font-size: 0.85rem;
+  color: #65676b;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* Bio Section */
+.info p:nth-child(4) {
+  font-size: 0.9rem;
+  color: #4b4f56;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f2f5;
+  width: 100%;
+  text-align: center;
+  line-height: 1.4;
+}
+
+
+/* Responsiveness: Stack columns on smaller screens */
+@media (max-width: 1100px) {
+  .mainContent {
+    grid-template-columns: 250px 1fr;
+    /* Hide right sidebar first */
+  }
+
+  .rightContent {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    grid-template-columns: 1fr;
+    /* Only show feed on mobile */
+  }
+
+  .leftContent {
+    display: none;
   }
 }
 
 /* --- 2. Main Card Container --- */
 .post_main_card {
   background-color: #ffffff;
-  border-radius: 8px; /* Facebook's standard corner radius */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow depth */
+  border-radius: 8px;
+  /* Facebook's standard corner radius */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  /* Subtle shadow depth */
   width: 100%;
-  max-width: 450px; /* Standard feed width */
+  max-width: 450px;
+  /* Standard feed width */
   margin: 0 auto 20px auto;
   overflow: hidden;
-  padding: 12px 16px; /* Facebook spacing */
+  padding: 12px 16px;
+  /* Facebook spacing */
   box-sizing: border-box;
 }
 
@@ -44,7 +415,8 @@
 .post_profile_image {
   width: 40px;
   height: 40px;
-  border-radius: 50%; /* Perfect circle */
+  border-radius: 50%;
+  /* Perfect circle */
   flex-shrink: 0;
 }
 
@@ -63,7 +435,8 @@
    Let's make it look like the Name Line. */
 .post_prfole_name_time_ago {
   height: 10px;
-  width: 120px; /* Short width for name */
+  width: 120px;
+  /* Short width for name */
   border-radius: 10px;
   margin-bottom: 6px;
 }
@@ -72,11 +445,13 @@
 .post_prfole_name_time_ago::after {
   content: "";
   display: block;
-  width: 80px; /* Shorter width for timestamp */
+  width: 80px;
+  /* Shorter width for timestamp */
   height: 8px;
   border-radius: 10px;
-  margin-top: 14px; /* Push it down */
-  
+  margin-top: 14px;
+  /* Push it down */
+
   /* Apply the same shimmer background manually or inherit */
   background: #f6f7f8;
   background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
@@ -95,7 +470,8 @@
 /* --- 4. Description (Text Lines) --- */
 .post_card_description {
   height: 10px;
-  width: 90%; /* Doesn't go full width usually */
+  width: 90%;
+  /* Doesn't go full width usually */
   margin-top: 8px;
   margin-bottom: 8px;
   border-radius: 4px;
@@ -104,30 +480,30 @@
 /* --- 5. Media (The Big Image/Video) --- */
 .post_card_media {
   width: 100%;
-  height: 300px; /* Standard placeholder height */
-  border-radius: 8px; /* Slight curve on media */
+  height: 300px;
+  /* Standard placeholder height */
+  border-radius: 8px;
+  /* Slight curve on media */
   margin-top: 4px;
 }
 
 /* --- 6. The Shared Shimmer Class Logic --- */
 /* This applies the effect to all the 'grey' elements defined above */
-.post_profile_image, 
-.post_prfole_name_time_ago, 
-.post_firend_stats, 
-.post_card_description, 
+.post_profile_image,
+.post_prfole_name_time_ago,
+.post_firend_stats,
+.post_card_description,
 .post_card_media {
   background: #f6f7f8;
-  background-image: linear-gradient(
-    to right, 
-    #f6f7f8 0%, 
-    #edeef1 20%, 
-    #f6f7f8 40%, 
-    #f6f7f8 100%
-  );
+  background-image: linear-gradient(to right,
+      #f6f7f8 0%,
+      #edeef1 20%,
+      #f6f7f8 40%,
+      #f6f7f8 100%);
   background-repeat: no-repeat;
-  background-size: 800px 100%; 
+  background-size: 800px 100%;
   animation-duration: 1s;
-  animation-fill-mode: forwards; 
+  animation-fill-mode: forwards;
   animation-iteration-count: infinite;
   animation-name: placeholderShimmer;
   animation-timing-function: linear;
@@ -138,31 +514,35 @@
 /* --- Mobile Responsiveness --- */
 
 @media (max-width: 463px) {
-    /* For Tablets and smaller screens */
-    .post_card {
-        width: 100%;
-        max-height: 100%;
-        border-left: none;
-        border-right: none;
-        box-shadow: none;
-        border-radius: 1px;
-        border-top: 5px solid #f0f2f5; /* Thicker separator for mobile view */
-        border-bottom: none;
-    }
-    
-    .card_container {
-        padding: 11px; /* Slightly less padding on mobile */
-    }
 
-    .post_media {
-        /* On mobile, align media container padding */
-        margin: 0 -12px 0; /* Use mobile's padding adjustment */
-    }
+  /* For Tablets and smaller screens */
+  .post_card {
+    width: 100%;
+    max-height: 100%;
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
+    border-radius: 1px;
+    border-top: 5px solid #f0f2f5;
+    /* Thicker separator for mobile view */
+    border-bottom: none;
+  }
 
-    .profile_image {
-        width: 36px;
-        height: 36px;
-    }
+  .card_container {
+    padding: 11px;
+    /* Slightly less padding on mobile */
+  }
+
+  .post_media {
+    /* On mobile, align media container padding */
+    margin: 0 -12px 0;
+    /* Use mobile's padding adjustment */
+  }
+
+  .profile_image {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 
@@ -176,6 +556,7 @@
   0% {
     background-position: -468px 0;
   }
+
   100% {
     background-position: 468px 0;
   }
@@ -184,13 +565,17 @@
 /* --- 2. Main Card Container --- */
 .postmaincard {
   background-color: #ffffff;
-  border-radius: 8px; /* Facebook's standard corner radius */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow depth */
+  border-radius: 8px;
+  /* Facebook's standard corner radius */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  /* Subtle shadow depth */
   width: 100%;
-  max-width: 450px; /* Standard feed width */
+  max-width: 450px;
+  /* Standard feed width */
   margin: 0 auto 20px auto;
   overflow: hidden;
-  padding: 12px 16px; /* Facebook spacing */
+  padding: 12px 16px;
+  /* Facebook spacing */
   box-sizing: border-box;
 }
 
@@ -211,7 +596,8 @@
 .postprofileimage {
   width: 40px;
   height: 40px;
-  border-radius: 50%; /* Perfect circle */
+  border-radius: 50%;
+  /* Perfect circle */
   flex-shrink: 0;
 }
 
@@ -230,7 +616,8 @@
    Let's make it look like the Name Line. */
 .postprfolenametimeago {
   height: 10px;
-  width: 120px; /* Short width for name */
+  width: 120px;
+  /* Short width for name */
   border-radius: 10px;
   margin-bottom: 6px;
 }
@@ -239,11 +626,13 @@
 .postprfolenametimeago::after {
   content: "";
   display: block;
-  width: 80px; /* Shorter width for timestamp */
+  width: 80px;
+  /* Shorter width for timestamp */
   height: 8px;
   border-radius: 10px;
-  margin-top: 14px; /* Push it down */
-  
+  margin-top: 14px;
+  /* Push it down */
+
   /* Apply the same shimmer background manually or inherit */
   background: #f6f7f8;
   background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
@@ -262,7 +651,8 @@
 /* --- 4. Description (Text Lines) --- */
 .postcarddescription {
   height: 10px;
-  width: 90%; /* Doesn't go full width usually */
+  width: 90%;
+  /* Doesn't go full width usually */
   margin-top: 8px;
   margin-bottom: 8px;
   border-radius: 4px;
@@ -271,30 +661,30 @@
 /* --- 5. Media (The Big Image/Video) --- */
 .postcardmedia {
   width: 100%;
-  height: 300px; /* Standard placeholder height */
-  border-radius: 8px; /* Slight curve on media */
+  height: 300px;
+  /* Standard placeholder height */
+  border-radius: 8px;
+  /* Slight curve on media */
   margin-top: 4px;
 }
 
 /* --- 6. The Shared Shimmer Class Logic --- */
 /* This applies the effect to all the 'grey' elements defined above */
-.postprofileimage, 
-.postprfolenametimeago, 
-.postfirendstats, 
-.postcarddescription, 
+.postprofileimage,
+.postprfolenametimeago,
+.postfirendstats,
+.postcarddescription,
 .postcardmedia {
   background: #f6f7f8;
-  background-image: linear-gradient(
-    to right, 
-    #f6f7f8 0%, 
-    #edeef1 20%, 
-    #f6f7f8 40%, 
-    #f6f7f8 100%
-  );
+  background-image: linear-gradient(to right,
+      #f6f7f8 0%,
+      #edeef1 20%,
+      #f6f7f8 40%,
+      #f6f7f8 100%);
   background-repeat: no-repeat;
-  background-size: 800px 100%; 
+  background-size: 800px 100%;
   animation-duration: 1s;
-  animation-fill-mode: forwards; 
+  animation-fill-mode: forwards;
   animation-iteration-count: infinite;
   animation-name: placeholderShimmer;
   animation-timing-function: linear;
@@ -305,29 +695,33 @@
 /* --- Mobile Responsiveness --- */
 
 @media (max-width: 463px) {
-    /* For Tablets and smaller screens */
-    .postcard {
-        width: 100%;
-        max-height: 100%;
-        border-left: none;
-        border-right: none;
-        box-shadow: none;
-        border-radius: 1px;
-        border-top: 5px solid #f0f2f5; /* Thicker separator for mobile view */
-        border-bottom: none;
-    }
-    
-    .cardcontainer {
-        padding: 11px; /* Slightly less padding on mobile */
-    }
 
-    .postmedia {
-        /* On mobile, align media container padding */
-        margin: 0 -12px 0; /* Use mobile's padding adjustment */
-    }
+  /* For Tablets and smaller screens */
+  .postcard {
+    width: 100%;
+    max-height: 100%;
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
+    border-radius: 1px;
+    border-top: 5px solid #f0f2f5;
+    /* Thicker separator for mobile view */
+    border-bottom: none;
+  }
 
-    .profileimage {
-        width: 36px;
-        height: 36px;
-    }
+  .cardcontainer {
+    padding: 11px;
+    /* Slightly less padding on mobile */
+  }
+
+  .postmedia {
+    /* On mobile, align media container padding */
+    margin: 0 -12px 0;
+    /* Use mobile's padding adjustment */
+  }
+
+  .profileimage {
+    width: 36px;
+    height: 36px;
+  }
 }

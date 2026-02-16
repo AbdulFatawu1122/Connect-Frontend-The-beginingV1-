@@ -231,13 +231,13 @@ function User() {
                 {currentUser.firstname} have {totla_firends} Friends
               </h3>
               {friends.map((friend) => (
-                <div key={friend.id} className="my-firends-list">
+                <div key={friend.user?.id} className="my-firends-list">
                   <Link
                     style={{ textDecoration: "none" }}
-                    to={`/chats/${friend.id}`}
+                    to={`/chats/${friend.user?.id}`}
                   >
                     <div className="info">
-                      {friend.firstname} {friend.lastname}
+                      {friend.user?.firstname} {friend.user?.lastname}
                     </div>
                   </Link>
                 </div>

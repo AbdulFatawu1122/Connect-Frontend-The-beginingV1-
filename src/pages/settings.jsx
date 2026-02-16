@@ -15,6 +15,8 @@ function Settings() {
   const [userPost, setUserPost] = useState([]);
   const [isformDisable, setisformDisable] = useState(true);
 
+  const [uploadingProfile, setUploadingProfile] = useState(false);
+
   //Updating USer info
   const [middlename, setMiddleName] = useState("");
   const [bio, setBio] = useState("");
@@ -55,7 +57,6 @@ function Settings() {
     setformerror("");
     return true;
   };
-
   const handleUpdateInfo = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -105,7 +106,7 @@ function Settings() {
     if (profileImage) {
       const formData = new FormData();
       formData.append("file", profileImage);
-
+      setUploadingProfile(true);
       try {
         const token = sessionStorage.getItem("token");
         const res = await fetch(`${BASE_URL}/posts/profileImage`, {
@@ -121,11 +122,12 @@ function Settings() {
           setProfileImage([]);
           navigate("/profile");
         }
+        setUploadingProfile(false);
       } catch (error) {
         console.error("Something went wrong and failed to change profile");
       }
     } else {
-      alert("You have to select or upload an Image")
+      alert("You have to select or upload an Image");
     }
   };
 
@@ -219,7 +221,12 @@ function Settings() {
               </div>
             )}
             <div className={styles.closebutton}>
-              <button onClick={HideUpdateYserInfoPopup}>❌</button>
+              <button
+                disabled={uploadingProfile}
+                onClick={HideUpdateYserInfoPopup}
+              >
+                ❌
+              </button>
             </div>
             <form onSubmit={handleUpdateInfo}>
               <fieldset>
@@ -312,23 +319,34 @@ function Settings() {
         </div>
         <div className={styles.lineabovesettingstext}></div>
         <h1>Manage your Account {currentUser.firstname} </h1>
-        <div className={styles.chnageProfileImage} style={{alignItems:"center", textAlign:'center'}}>
+        <div
+          className={styles.chnageProfileImage}
+          style={{ alignItems: "center", textAlign: "center" }}
+        >
           <fieldset>
             <h2>click to choose your new Profile Picture and hit Change</h2>
             <form onSubmit={handleChangeProfileImage}>
-            <input
-              style={{ width: "400px" }}
-              accept="image/*"
-              onChange={(e) => setProfileImage(e.target.files[0])}
-              type="file"
-            />
-            <button
-              style={{ width: "130px", backgroundColor: "green", height:"50px" }}
-              type="submit"
-            >
-              Change Your Profile
-            </button>
-          </form>
+              <input
+                style={{ width: "400px" }}
+                accept="image/*"
+                onChange={(e) => setProfileImage(e.target.files[0])}
+                type="file"
+              />
+              {uploadingProfile ? (
+                <h2>Uploading Your Profile wait....</h2>
+              ) : (
+                <button
+                  style={{
+                    width: "130px",
+                    backgroundColor: "green",
+                    height: "50px",
+                  }}
+                  type="submit"
+                >
+                  Change Your Profile
+                </button>
+              )}
+            </form>
           </fieldset>
         </div>
         <div className={styles.settingsContent}>
