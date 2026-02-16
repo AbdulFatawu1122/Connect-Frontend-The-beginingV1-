@@ -24,7 +24,14 @@ function Settings() {
   const [town, setTown] = useState("");
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
-  const [age, setAge] = useState("");
+  const [username, setUsername] = useState("");
+  const [gender, setGender] = useState("");
+  const [schoolname, setSchoolName] = useState("");
+  const [student_number, setStudentNumber] = useState("");
+  const [course_name, setCourseName] = useState("");
+  const [hobby, setHobby] = useState("");
+  const [relationship, setRelationship] = useState("");
+
   const [profileImage, setProfileImage] = useState([]);
 
   const handleenbaleform = () => setisformDisable(false);
@@ -49,7 +56,11 @@ function Settings() {
       !date_of_birth ||
       !firstname ||
       !lastname ||
-      !age
+      !gender ||
+      !course_name ||
+      !schoolname ||
+      !student_number ||
+      !username
     ) {
       setformerror("All fields Need to fill");
       return false;
@@ -67,11 +78,17 @@ function Settings() {
         bio,
         town,
         date_of_birth,
+        hobby,
+        relationship,
       },
       user_info: {
         firstname,
         lastname,
-        age,
+        gender,
+        username,
+        schoolname,
+        course_name,
+        student_number,
       },
     };
 
@@ -230,6 +247,16 @@ function Settings() {
             </div>
             <form onSubmit={handleUpdateInfo}>
               <fieldset>
+                <div className={styles.username}>
+                  <label>UserName</label>
+                  <input
+                    type="text"
+                    placeholder="User Name..."
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </div>
+
                 <div className={styles.firstname}>
                   <label>First Name</label>
                   <input
@@ -248,15 +275,7 @@ function Settings() {
                     type="text"
                   />
                 </div>
-                <div className={styles.age}>
-                  <label>Age</label>
-                  <input
-                    placeholder={currentUser.user.age}
-                    value={age}
-                    onChange={(e) => setAge(e.target.value)}
-                    type="number"
-                  />
-                </div>
+
                 <div className={styles.middlname}>
                   <label>Middle Name</label>
                   <input
@@ -291,6 +310,68 @@ function Settings() {
                     onChange={(e) => setDataOfBirth(e.target.value)}
                   />
                 </div>
+
+                <div className={styles.student_number}>
+                  <label>Student ID</label>
+                  <input
+                    type="text"
+                    placeholder={currentUser?.user.student_number}
+                    value={student_number}
+                    onChange={(e) => setStudentNumber(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.hobby}>
+                  <label>What you Like</label>
+                  <input
+                    type="text"
+                    placeholder="What do you Like?"
+                    value={hobby}
+                    onChange={(e) => setHobby(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.schoolname}>
+                  <label>Select a School</label>
+                  <select
+                    value={schoolname}
+                    onChange={(e) => setSchoolName(e.target.value)}
+                  >
+                    <option>---Select School-----</option>
+                    <option value="tamale technincal university">
+                      Tamale Technical University
+                    </option>
+                  </select>
+                </div>
+
+                <div className={styles.coursename}>
+                  <label>Program or Course Name</label>
+                  <select
+                    value={course_name}
+                    onChange={(e) => setCourseName(e.target.value)}
+                  >
+                    <option>----Choose your Program-----</option>
+                    <option value="btech information technology">
+                      BTech Information Technology
+                    </option>
+                    <option value="btech cyber sycurity">
+                      Btech Cyber Security
+                    </option>
+                  </select>
+                </div>
+
+                <div className={styles.gender}>
+                  <label>Gender</label>
+                  <select
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                  >
+                    <option>----Select Gender---</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+
                 <div className={styles.submitbutton}>
                   <button type="submit"> Update Now</button>
                 </div>
@@ -365,13 +446,25 @@ function Settings() {
               Last Name: <strong>{currentUser.user?.lastname}</strong>{" "}
             </h4>
             <h4>
-              Age: <strong>{currentUser.user?.age}</strong>
+              Gender: <strong style={{textTransform:"capitalize"}}>{currentUser.user?.gender}</strong>
             </h4>
             <h4>
-              Date of Birth:{" "}
+              Hobby: <strong style={{textTransform:"capitalize"}}>{profileData?.hobby}</strong>
+            </h4>
+
+            <h4>
+              School: <strong style={{textTransform:"capitalize"}}>{currentUser.user?.schoolname}</strong>
+            </h4>
+
+            <h4>
+              Program: <strong style={{textTransform:"capitalize"}}>{currentUser.user?.course_name}</strong>
+            </h4>
+
+            <h4>
+              Born on:{" "}
               <strong>
-                {profileData.date_of_birth
-                  ? formatDateofBirth(profileData.date_of_birth)
+                {currentUser.user?.date_of_birth
+                  ? formatDateofBirth(currentUser.user?.date_of_birth)
                   : "Loading"}
               </strong>
             </h4>
@@ -379,9 +472,8 @@ function Settings() {
               Email or Phone: <strong>{currentUser.user?.email}</strong>{" "}
             </h4>
           </div>
-
           <div className={styles.userDetails}>
-            <h3>{currentUser.user?.firstname}Details</h3>
+            <h3>{currentUser.user?.firstname} Details</h3>
             <h4>
               Bio: <strong>{profileData.bio}</strong>
             </h4>

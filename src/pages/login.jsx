@@ -68,8 +68,9 @@ function Login() {
     <div className={styles.login_landing_page}>
       <div className={styles.content_wrapper}></div>
       <div className={styles.message}>
-        <h1>Welecome to Connect 2.0</h1>
-        <p>Connecting you to the world of AI</p>
+        <h1>Welecome to Connect</h1>
+          <p>Connecting you to the world of AI</p>
+          <p>Log In to your account to Connect to people who matter.</p>
       </div>
       <div className={styles.login_card}>
         <h1>Login</h1>
@@ -77,8 +78,8 @@ function Login() {
           <div className={styles.email}>
             <label>Email</label>
             <input
-              placeholder="Email....."
-              type="email"
+              placeholder="Email or Phone or Username.."
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
