@@ -177,9 +177,9 @@ function User() {
     if (FeedData.length >= 1) {
       return (
         <div>
-          <h1>No more Post From {currentUser.firstname}.</h1>
+          <h1>No more Post From {currentUser.user?.firstname}.</h1>
           <h3>
-            Born on {format(Date(profileData.date_of_birth), "dd, MMMM yyyy")}
+            Born on {format(Date(currentUser.user?.date_of_birth), "dd, MMMM yyyy")}
           </h3>
         </div>
       );
@@ -238,12 +238,6 @@ function User() {
               </h3>
               <h3 style={{ textTransform: "capitalize" }}>
                 Program: {currentUser.user?.course_name}
-              </h3>
-              <h3>
-                Date of Birth:{" "}
-                {currentUser.user?.date_of_birth
-                  ? formatDate(currentUser.user?.date_of_birth)
-                  : "Loading..."}
               </h3>
             </div>
             <div className="relationships">
