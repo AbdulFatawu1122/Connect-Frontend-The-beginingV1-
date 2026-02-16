@@ -9,7 +9,7 @@ function NavBar() {
     <div>
       <div className={styles.navbar}>
         <div className={styles.left_logo}>
-          <Link to={"/"} style={{textDecoration:'none'}}><p>J</p></Link>
+          <Link to={"/"} style={{textDecoration:'none'}}><p>C</p></Link>
         </div>
         <div className={styles.middle_items}>
           <Link title="Home, Feed, Love❤️" to={"/"}>Home 🏡</Link>
