@@ -185,9 +185,13 @@ function Settings() {
         },
       );
 
-      const data = await current_user.json();
+      if (currentUser.ok) {
+        const data = await current_user.json();
       // console.log(data);
       setCurrentUser(data);
+      } else {
+        navigate("/login")
+      }
     } catch (eeror) {
       console.log("Fail to get Current User");
     }
