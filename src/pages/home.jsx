@@ -336,8 +336,8 @@ function Home() {
               <div className={styles.contacts}>
                 <h2>Contacts</h2>
                 <p>Click on contact to start chatting</p>
-                {friends.map((friend) => (
-                  <div key={friend.user?.id} className={styles.myFriendinfo}>
+                {friends.map((friend, idx) => (
+                  <div key={idx} className={styles.myFriendinfo}>
                     <Link
                       style={{ textDecoration: "none" }}
                       to={`/chats/${friend.user?.id}`}

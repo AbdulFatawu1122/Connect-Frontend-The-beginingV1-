@@ -13,6 +13,11 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [showPassword, setShowPassword] = useState(false)
+
+  const ShowUserPassword = () => setShowPassword(true);
+  const HideUserPassword = () => setShowPassword(false);
+
   // For navigating to protected page
   const navigate = useNavigate();
 
@@ -89,10 +94,13 @@ function Login() {
             <label>Password</label>
             <input
               placeholder="Password....."
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            {
+              showPassword ? <img onClick={HideUserPassword} src="/hide_password.png"/> : <img onClick={ShowUserPassword} src="/show_password.png" alt="" />
+            }
           </div>
           <button type="submit" disabled={loading}>
             {loading ? "Login In...." : "Login"}

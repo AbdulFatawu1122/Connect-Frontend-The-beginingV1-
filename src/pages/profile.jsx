@@ -416,8 +416,8 @@ function Profile() {
           <h1>My Friends</h1>
           <h3>You have {totla_firends} Friends</h3>
           <h3>Click on firend to chat with</h3>
-          {friends.map((friend) => (
-            <div key={friend.user?.id} className={styles.my_firends_list}>
+          {friends.map((friend, idx) => (
+            <div key={idx} className={styles.my_firends_list}>
               <Link
                 style={{ textDecoration: "none" }}
                 to={`/chats/${friend.user?.id}`}

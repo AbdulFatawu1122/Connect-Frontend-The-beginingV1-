@@ -98,6 +98,18 @@ body {
     gap: 15px; /* Increased gap since there are fewer fields */
 }
 
+.password {
+    display: flex;
+    flex-direction: row;
+}
+
+.password img {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
 /* --- 6. Input Field Groups --- */
 .password label {
     display: none; /* Hide labels, relying on placeholder */

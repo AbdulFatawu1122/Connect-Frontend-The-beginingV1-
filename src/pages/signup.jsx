@@ -18,6 +18,11 @@ function SignUp() {
   const [student_number, setStudentNumber] = useState("");
   const [course_name, setCourseName] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const ShowUserPassword = () => setShowPassword(true);
+  const HideUserPassword = () => setShowPassword(false);
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -206,9 +211,11 @@ function SignUp() {
             <div className={styles.coursename}>
               <label>Program or Course Name</label>
               <input
-              value={course_name}
-              onChange={(e) => setCourseName(e.target.value)}
-               type="text" placeholder="Type in your course name" />
+                value={course_name}
+                onChange={(e) => setCourseName(e.target.value)}
+                type="text"
+                placeholder="Type in your course name"
+              />
             </div>
             <div className={styles.gender}>
               <label>Gender</label>
@@ -225,11 +232,20 @@ function SignUp() {
             <div className={styles.password}>
               <label>Password</label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password.."
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              {showPassword ? (
+                <img onClick={HideUserPassword} src="/hide_password.png" />
+              ) : (
+                <img
+                  onClick={ShowUserPassword}
+                  src="/show_password.png"
+                  alt=""
+                />
+              )}
             </div>
             <button disabled={loading} type="submit">
               {loading ? "Creating Account....." : "Create Account"}
