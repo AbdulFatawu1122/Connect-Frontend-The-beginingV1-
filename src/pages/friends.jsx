@@ -277,7 +277,6 @@ function FriendsPage() {
                   <h4>
                     {friend_to_accept.user?.firstname}{" "}
                     {friend_to_accept.user?.lastname}{" "}
-                    {friend_to_accept.user?.id}{" "}
                   </h4>{" "}
                 </Link>
               </div>
