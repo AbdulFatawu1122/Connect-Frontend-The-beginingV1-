@@ -77,7 +77,6 @@ function Settings() {
         middlename,
         bio,
         town,
-        date_of_birth,
         hobby,
         relationship,
       },
@@ -89,6 +88,7 @@ function Settings() {
         schoolname,
         course_name,
         student_number,
+        date_of_birth,
       },
     };
 
