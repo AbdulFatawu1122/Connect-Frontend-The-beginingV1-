@@ -133,7 +133,7 @@ function Profile() {
         },
       });
 
-     if (current_user.ok) {
+      if (current_user.ok) {
         const data = await current_user.json();
         setCurrentUser(data);
       } else if (current_user.status === 404) {
@@ -162,7 +162,6 @@ function Profile() {
       console.log("Fail to Load Profile");
     }
   };
-
   const fetchFeed = useCallback(async (pageNum) => {
     try {
       const token = sessionStorage.getItem("token");
@@ -237,9 +236,9 @@ function Profile() {
         <div>
           <h3>No more Post From You.</h3>
           <h4>
-           {currentUser.user?.date_of_birth
-                ? formatDate(currentUser.user?.date_of_birth)
-                : "Loading..."}
+            {currentUser.user?.date_of_birth
+              ? formatDate(currentUser.user?.date_of_birth)
+              : "Loading..."}
           </h4>
         </div>
       );
@@ -370,73 +369,91 @@ function Profile() {
         {/* Create Post Form */}
         {showCreate && ShowPostCreation()}
       </div>
-      {loadingProfileData ? (
-        "Laoding User Profile Please Wait......"
-      ) : (
-        <div className={styles.content}>
-          <div className={styles.profileInfo}>
-            <h1>Profile Details</h1>
-            <h1 style={{textTransform:"capitalize"}}>
-              Welecome On Board {currentUser.user?.firstname}, {currentUser.lastname}
-            </h1>
-            <h3>Email: {currentUser.user?.email} </h3>
-            <h4>BIO: {profileData.bio}</h4>
-            <h4 style={{textTransform:"capitalize"}}>Town: {profileData.town} </h4>
-            <h3 style={{textTransform:"capitalize"}}>Middle Name: {profileData.middlename} </h3>
-            <h3 style={{textTransform:"capitalize"}}>Hobby: {profileData?.hobby}</h3>
-            <h3 style={{textTransform:"capitalize"}}>Relationship: {profileData?.relationship_status}</h3>
-            <h3 style={{textTransform:"capitalize"}}>Gender: {currentUser.user?.gender}</h3>
-            <h3 style={{textTransform:"capitalize"}}>School: {currentUser.user?.schoolname}</h3>
-            <h3 style={{textTransform:"capitalize"}}>Program: {currentUser.user?.course_name}</h3>
-            <h3>
-              Date of Birth:{" "}
-              {currentUser.user?.date_of_birth
-                ? formatDate(currentUser.user?.date_of_birth)
-                : "Loading..."}
-            </h3>
+      <div className={styles.profileContent}>
+        {loadingProfileData ? (
+          "Laoding User Profile Please Wait......"
+        ) : (
+          <div className={styles.content}>
+            <div className={styles.profileInfo}>
+              <h1>Profile Details</h1>
+              <h1 style={{ textTransform: "capitalize" }}>
+                Welecome On Board {currentUser.user?.firstname},{" "}
+                {currentUser.lastname}
+              </h1>
+              <h3>Email: {currentUser.user?.email} </h3>
+              <h4>BIO: {profileData.bio}</h4>
+              <h4 style={{ textTransform: "capitalize" }}>
+                Town: {profileData.town}{" "}
+              </h4>
+              <h3 style={{ textTransform: "capitalize" }}>
+                Middle Name: {profileData.middlename}{" "}
+              </h3>
+              <h3 style={{ textTransform: "capitalize" }}>
+                Hobby: {profileData?.hobby}
+              </h3>
+              <h3 style={{ textTransform: "capitalize" }}>
+                Relationship: {profileData?.relationship_status}
+              </h3>
+              <h3 style={{ textTransform: "capitalize" }}>
+                Gender: {currentUser.user?.gender}
+              </h3>
+              <h3 style={{ textTransform: "capitalize" }}>
+                School: {currentUser.user?.schoolname}
+              </h3>
+              <h3 style={{ textTransform: "capitalize" }}>
+                Program: {currentUser.user?.course_name}
+              </h3>
+              <h3>
+                Date of Birth:{" "}
+                {currentUser.user?.date_of_birth
+                  ? formatDate(currentUser.user?.date_of_birth)
+                  : "Loading..."}
+              </h3>
+            </div>
           </div>
+        )}
+        <div className={styles.my_friends}>
+          <h1>My Friends</h1>
+          <h3>You have {totla_firends} Friends</h3>
+          <h3>Click on firend to chat with</h3>
+          {friends.map((friend) => (
+            <div key={friend.user?.id} className={styles.my_firends_list}>
+              <Link
+                style={{ textDecoration: "none" }}
+                to={`/chats/${friend.user?.id}`}
+              >
+                <div className={styles.info}>
+                  {friend.user?.firstname} {friend.user?.lastname}
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
-      )}
-      <div className={styles.my_friends}>
-        <h1>My Friends</h1>
-        <h3>You have {totla_firends} Friends</h3>
-        <h3>Click on firend to chat with</h3>
-        {friends.map((friend) => (
-          <div key={friend.user?.id} className={styles.my_firends_list}>
-            <Link style={{ textDecoration: "none" }} to={`/chats/${friend.user?.id}`}>
-              <div className={styles.info}>
-                {friend.user?.firstname} {friend.user?.lastname}
-              </div>
-            </Link>
-          </div>
-        ))}
+        <div style={styles.settingsLink}>
+          <h1>
+            <Link to={`/settings/${currentUser.user?.id}`}>Settings</Link>
+          </h1>
+        </div>
       </div>
-
-      <div style={styles.settingsLink}>
-        <h1>
-          <Link to={`/settings/${currentUser.user?.id}`}>Settings</Link>
-        </h1>
-      </div>
-
       <div className={styles.timeLine}>
         {LoadingInitial ? (
-        FeedLoadingAninmate()
-      ) : (
-        <InfiniteScroll
-          dataLength={FeedData.length}
-          next={loadNextPage}
-          hasMore={hasMore}
-          loader={FeedLoadingAninmate()}
-          endMessage={<h1 style={{ textAlign: "center" }}>{feedLenght()}</h1>}
-          scrollThreshold={0.9} //load more post when user is 200px from the buttom
-        >
-          <div className={styles.feedTimeLine}>
-            {FeedData.map((post) => {
-              return <FeedCard key={post.id} feed={post} />;
-            })}
-          </div>
-        </InfiniteScroll>
-      )}
+          FeedLoadingAninmate()
+        ) : (
+          <InfiniteScroll
+            dataLength={FeedData.length}
+            next={loadNextPage}
+            hasMore={hasMore}
+            loader={FeedLoadingAninmate()}
+            endMessage={<h1 style={{ textAlign: "center" }}>{feedLenght()}</h1>}
+            scrollThreshold={0.9} //load more post when user is 200px from the buttom
+          >
+            <div className={styles.feedTimeLine}>
+              {FeedData.map((post) => {
+                return <FeedCard key={post.id} feed={post} />;
+              })}
+            </div>
+          </InfiniteScroll>
+        )}
       </div>
     </div>
   );
