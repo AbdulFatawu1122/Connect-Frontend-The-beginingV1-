@@ -259,7 +259,7 @@ function Home() {
   ) : (
     <div className={styles.mainHome}>
       <div className={styles.navBar}>
-        <NavBar />
+        <NavBar username={currentUser.user?.username}/>
       </div>
       <div className={styles.mainContent}>
         <div className={styles.leftContent}>

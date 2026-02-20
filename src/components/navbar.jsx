@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { BASE_URL } from "../apis/apis";
 
-function NavBar() {
+function NavBar(username) {
   return (
     <div>
       <div className={styles.navbar}>
@@ -13,7 +13,9 @@ function NavBar() {
         </div>
         <div className={styles.middle_items}>
           <Link title="Home, Feed, Love❤️" to={"/"}>Home 🏡</Link>
-          <Link title="Your Profile, Post and timeline" to={"/profile"}>Profile👤</Link>
+          <Link title="Your Profile, Post and timeline" 
+          to={`/@${username?.username}`}
+          >Profile👤</Link>
           <Link title="Checks on Your friends, add new and accept request" to={"/friends"}>Friends👥</Link>
         </div>
 

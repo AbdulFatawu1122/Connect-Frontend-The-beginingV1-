@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/navbar";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import styles from "../css/settings.module.css";
 import { addYears, format, parseISO } from "date-fns";
 
@@ -43,7 +43,10 @@ function Settings() {
 
   const navigate = useNavigate();
 
-  const { user_id } = useParams();
+  const location = useLocation();
+
+  //const { user_id } = useParams();
+  const user_id = location.state?.user_id;
 
   const ShowUpdateUserInfoPopup = () => setShowUpdate(true);
   const HideUpdateYserInfoPopup = () => setShowUpdate(false);
@@ -393,7 +396,7 @@ function Settings() {
 
   return (
     <>
-      <NavBar />
+      <NavBar username={currentUser.user?.username}  />
       <div className={styles.mainbody}>
         <div className={styles.settingtext}>
           <h1>Settings.</h1>

@@ -25,6 +25,7 @@ function SignUp() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userNameError, setUserNameError] = useState("");
 
   const navigate = useNavigate();
 
@@ -46,6 +47,15 @@ function SignUp() {
     }
     setError("");
     return true;
+  };
+
+  const validateUserName = () => {
+    if (username.includes(" ")) {
+      setUserNameError("User name can not have spaces in between!!.");
+      return false;
+    }
+    setUserNameError("");
+    return true
   };
 
   const LogMeIn = async () => {
@@ -84,10 +94,9 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm() || !validateUserName()) return;
 
     setLoading(true);
-
     const formDetails = {
       email,
       firstname,
@@ -100,7 +109,6 @@ function SignUp() {
       student_number,
       course_name,
     };
-
     try {
       const response = await fetch(`${BASE_URL}/auth/`, {
         method: "POST",
@@ -253,6 +261,7 @@ function SignUp() {
           </form>
           <div className={styles.error_displayer}>
             {error && <p style={{ color: "red" }}>{error}</p>}
+            {userNameError && <p style={{ color: "red" }}>{userNameError}</p>}
           </div>
           <div className={styles.links}>
             Have an account, LogIn <Link to="/login">here</Link>

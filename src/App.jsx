@@ -17,12 +17,12 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/user/:user_id" element={<User />} />
+          <Route path="/user/:username" element={<User />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/:username" element={<Profile />} />
           <Route path="/friends" element={<FriendsPage />} />
-          <Route path="/settings/:user_id" element={<Settings />}/>
+          <Route path="/settings/:username" element={<Settings />}/>
           <Route path="/chat" element={<Chat />} />
           <Route path="/chats/:reciever_id" element={<Chats />} />
         </Routes>

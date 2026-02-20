@@ -283,7 +283,9 @@ function FeedCard({ feed }) {
               <p className={styles.name}>
                 <Link
                   style={{ textDecoration: "none" }}
-                  to={`/user/${feed.user.userInfo.id}`}
+                  to={`/user/@${feed.user.userInfo?.username}`}
+                  //pass the user id using state
+                  state={{user_id:feed.user.userInfo.id}}
                   title={`${feed.user.userInfo.firstname}, ${feed.user.userInfo.lastname}`}
                 >
                   {feed.user.userInfo.firstname} {feed.user.userInfo.lastname}

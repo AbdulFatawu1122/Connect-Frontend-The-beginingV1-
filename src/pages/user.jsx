@@ -26,7 +26,8 @@ function User() {
   const me_id = location.state?.user_id;
 
   // Get the user id from the URL
-  const { user_id } = useParams();
+  //const { user_id } = useParams();
+  const user_id = location.state?.user_id;
   //console.log(user_id);
 
   const verify_token = async () => {

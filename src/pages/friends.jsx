@@ -13,6 +13,7 @@ function FriendsPage() {
   const [pendingAccept, setPendingAccept] = useState([]);
   const [requestISendPending, setRequestIsendPending] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState([]);
 
   const [loadingFriends, setLoadingFriends] = useState(false);
   const [addingFriend, setAddingFriend] = useState(false);
@@ -48,6 +49,28 @@ function FriendsPage() {
       }
     } catch (error) {
       console.log("Fail to verify Token");
+    }
+  };
+
+  const get_current_user = async (user_id) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const current_user = await fetch(
+        `${BASE_URL}/user/user-to-get?user_id=${user_id}`,
+        {
+          method: "Get",
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await current_user.json();
+      // console.log(data);
+      setCurrentUser(data);
+    } catch (eeror) {
+      console.log("Fail to get Current User");
     }
   };
 
@@ -192,6 +215,7 @@ function FriendsPage() {
   //combine and fetch all friends related data at onece after login
   const fetchFriendsRelatedData = async () => {
     setLoadingFriendsPage(true);
+    await get_current_user();
     await fetchFriends();
     await fetchSuggested();
     await PendingToAccept();
@@ -219,7 +243,7 @@ function FriendsPage() {
   return (
     <div className={styles.friends_page}>
       <div className={styles.navbar}>
-        <NavBar />
+        <NavBar username={currentUser.user?.username} />
       </div>
       <div style={{ paddingTop: "80px" }} className={styles.friend_content}>
         {loadingpageError ? (

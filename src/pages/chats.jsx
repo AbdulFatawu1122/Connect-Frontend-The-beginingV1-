@@ -80,7 +80,6 @@ function Chats() {
       console.log("Fail to get Current User");
     }
   };
-
   const LoadPreviousMessages = async (friends_id) => {
     const token = sessionStorage.getItem("token");
     try {

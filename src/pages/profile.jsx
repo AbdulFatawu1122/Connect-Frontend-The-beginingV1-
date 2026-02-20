@@ -356,7 +356,7 @@ function Profile() {
   return (
     <div className={styles.profilePage}>
       <div className={styles.navbar}>
-        <NavBar />
+        <NavBar username= {currentUser.user?.username} />
       </div>
       <div className={styles.createPost}>
         <button
@@ -431,7 +431,11 @@ function Profile() {
         </div>
         <div style={styles.settingsLink}>
           <h1>
-            <Link to={`/settings/${currentUser.user?.id}`}>Settings</Link>
+            <Link
+            to={`/settings/@${currentUser.user?.username}`}
+            state={{user_id: currentUser.user?.id}}
+            title={currentUser.user?.username}
+            >Settings</Link>
           </h1>
         </div>
       </div>
